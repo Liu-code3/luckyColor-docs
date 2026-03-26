@@ -133,7 +133,7 @@ export default withMermaid(defineConfig({
       next: '下一篇'
     },
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/message163/react-docs' }
+      { icon: 'github', link: 'https://github.com/Liu-code3' }
     ],
     footer: {
       message: 'Built with VitePress for LuckyColor SaaS.',
