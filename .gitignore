@@ -6,3 +6,4 @@ docs
 .dev-stdout.log
 .dev-stderr.log
 .playwright-home.png
+.idea/
