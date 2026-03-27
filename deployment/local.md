@@ -2,42 +2,67 @@
 
 ## 目标
 
-本地部署用于开发、联调和演示，目标是让前后端在一台机器上稳定运行。
+本地部署的目标不是做正式上线，而是让你在一台机器上稳定完成：
 
-## 依赖服务
+- 前后端启动
+- 数据库初始化
+- 登录验证
+- 菜单与系统管理联调
+- 交付前基本演示
 
-- MySQL 8.x
-- Redis 7.x
-- Node.js 20+
-- pnpm
+## 依赖清单
 
-## 启动 MySQL
+| 依赖 | 建议版本 | 说明 |
+| --- | --- | --- |
+| Node.js | 20+ | 前后端都依赖 |
+| pnpm | 8+ | 包管理器 |
+| MySQL | 8.x | 主数据库 |
+| Redis | 7.x | 缓存与验证码依赖 |
+| Docker | 可选 | 推荐用于启动 MySQL |
 
-后端仓库已提供 `docker-compose.yml`，可直接在 `D:\zl\luckyColor-admin-serve` 执行：
+## 部署顺序
 
-```bash
+建议严格按这个顺序，不要跳步：
+
+1. 启动 MySQL
+2. 准备 Redis
+3. 初始化后端
+4. 启动后端
+5. 启动前端
+6. 验证 Swagger、健康检查、登录页和系统页面
+
+## 第一步：启动 MySQL
+
+在后端仓库 `D:\zl\luckyColor-admin-serve` 下执行：
+
+```powershell
 docker compose up -d
 ```
 
-该配置默认创建：
+默认配置会创建：
 
 - 容器名：`luckycolor-admin-mysql`
 - 端口：`3306`
 - 数据库：`luckycolor_admin`
 - root 密码：`123456`
 
-## 准备 Redis
+## 第二步：准备 Redis
 
-Redis 需要自行准备，可以有两种方式：
+后端仓库当前自带的 `docker-compose.yml` 只有 MySQL，没有 Redis，所以 Redis 需要自行准备。你可以：
 
-1. 本地直接安装 Redis。
-2. 使用单独的 Redis 容器或远程 Redis 服务。
+1. 本机安装 Redis
+2. 单独拉一个 Redis 容器
+3. 使用远程 Redis
 
-然后把 `.env` 中的 `REDIS_URL` 改成实际连接地址。
+如果 Redis 地址不是默认值，记得修改后端 `.env` 中的：
 
-## 部署后端
+```ini
+REDIS_URL="redis://127.0.0.1:6379"
+```
 
-```bash
+## 第三步：初始化并启动后端
+
+```powershell
 cd D:\zl\luckyColor-admin-serve
 pnpm install
 Copy-Item .env.example .env
@@ -45,36 +70,114 @@ pnpm db:setup
 pnpm dev
 ```
 
-## 部署前端
+### 初始化完成后会得到
 
-```bash
+- 默认租户：`tenant_001`
+- 默认管理员：`admin / 123456`
+- 默认角色、菜单、部门、字典和租户套餐
+
+### 启动后优先验证
+
+- Swagger：`http://127.0.0.1:3001/docs`
+- 健康检查：`http://127.0.0.1:3001/api/health`
+
+## 第四步：启动前端
+
+```powershell
 cd D:\zl\luckyColor-admin
 pnpm install
 pnpm dev
 ```
 
-## 验证顺序
+默认访问地址：
 
-1. 打开 `http://127.0.0.1:3001/docs`
-2. 打开 `http://127.0.0.1:9900`
-3. 使用 `admin / 123456` 登录
-4. 检查首页、用户管理、菜单管理、租户管理是否能正常加载
+```text
+http://127.0.0.1:9900
+```
+
+## 第五步：联调验证
+
+建议按下面顺序检查：
+
+1. 打开 Swagger，确认接口文档可访问。
+2. 访问前端登录页。
+3. 使用 `admin / 123456` 登录。
+4. 检查工作台首页是否有统计和公告。
+5. 检查“用户管理”“角色管理”“菜单管理”“租户管理”能否正常打开。
+
+## 本地开发时的关键配置
+
+### 前端
+
+`D:\zl\luckyColor-admin\.env.dev` 中默认已经配置：
+
+- `VITE_API_PROXY_TARGET=http://127.0.0.1:3001`
+- `VITE_API_DOC_URL=http://127.0.0.1:3001/docs`
+- `VITE_TENANT_ID=tenant_001`
+- `VITE_LOGIN_CAPTCHA_ENABLED=true`
+- `VITE_TENANT_ENABLED=true`
+
+### 后端
+
+`D:\zl\luckyColor-admin-serve\.env` 里至少要确认：
+
+- `DATABASE_URL`
+- `JWT_SECRET`
+- `REDIS_URL`
+- `SWAGGER_ENABLED`
+- `TENANT_ENABLED`
+- `TENANT_HEADER`
 
 ## 常见问题
 
-### 前端能打开，但接口 404
+### 前端能打开，但接口都是 404
 
-- 检查后端是否启动
-- 检查前端代理目标是否仍指向 `http://127.0.0.1:3001`
-- 检查后端接口是否统一带 `/api` 前缀
+检查这三件事：
+
+1. 后端是否真的启动在 `3001`
+2. 前端 `VITE_API_PROXY_TARGET` 是否还是 `http://127.0.0.1:3001`
+3. 后端是否统一使用 `/api` 前缀
+
+### `pnpm db:setup` 报数据库连接失败
+
+检查：
+
+- MySQL 是否已启动
+- 端口 `3306` 是否被占用
+- `DATABASE_URL` 中的账号、密码、库名是否正确
+
+### 后端能启动，但登录时报错
+
+检查：
+
+- Redis 是否可连通
+- 验证码是否已先完成校验
+- 默认管理员数据是否已写入
+- 当前租户是否为 `tenant_001`
 
 ### Swagger 打不开
 
-- 检查 `.env` 中 `SWAGGER_ENABLED` 是否为 `true`
-- 检查后端端口是否冲突
+检查：
 
-### 登录失败
+- `.env` 中 `SWAGGER_ENABLED=true`
+- 后端端口是否冲突
+- 启动日志里是否有环境变量校验报错
 
-- 检查数据库种子数据是否执行成功
-- 检查默认管理员账号是否已被改动
-- 检查租户模式是否要求附带 `x-tenant-id`
+### 页面刷新后 404
+
+这是生产部署时常见问题，本地 Vite 开发环境通常不会遇到。原因一般是 Nginx 没有做 SPA 回退，需要配置：
+
+```nginx
+location / {
+    try_files $uri $uri/ /index.html;
+}
+```
+
+## 本地部署适合的场景
+
+- 前后端开发联调
+- 测试环境预演
+- 交付演示准备
+- 代码改动后的本机回归验证
+
+如果你已经准备把系统部署到服务器，下一步建议看 [生产部署方案](/deployment/production) 和 [部署排查清单](/deployment/troubleshooting)。

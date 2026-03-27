@@ -93,7 +93,8 @@ export default withMermaid(defineConfig({
         {
           text: '前端',
           items: [
-            { text: '前端说明', link: '/frontend/overview' }
+            { text: '前端说明', link: '/frontend/overview' },
+            { text: '前端模块渐进式解读', link: '/frontend/module-walkthrough' }
           ]
         }
       ],
@@ -101,7 +102,9 @@ export default withMermaid(defineConfig({
         {
           text: '后端',
           items: [
-            { text: '后端说明', link: '/backend/overview' }
+            { text: '后端说明', link: '/backend/overview' },
+            { text: '后端模块渐进式解读', link: '/backend/module-walkthrough' },
+            { text: '切换 Java 时的文档更新点', link: '/backend/java-migration' }
           ]
         }
       ],
@@ -113,7 +116,8 @@ export default withMermaid(defineConfig({
             { text: '生产部署方案', link: '/deployment/production' },
             { text: 'Docker Compose 完整部署', link: '/deployment/docker-compose' },
             { text: 'Nginx / HTTPS 配置', link: '/deployment/nginx-https' },
-            { text: '拓扑建议', link: '/deployment/topologies' }
+            { text: '拓扑建议', link: '/deployment/topologies' },
+            { text: '部署排查清单', link: '/deployment/troubleshooting' }
           ]
         }
       ]
