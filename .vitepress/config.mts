@@ -7,15 +7,22 @@ const dayjsEsmEntry = require.resolve('dayjs/esm/index.js');
 const sanitizeUrlEsmEntry = require.resolve(
   '@braintree/sanitize-url/src/index.ts'
 );
+const repository = process.env.GITHUB_REPOSITORY;
+const repositoryOwner = process.env.GITHUB_REPOSITORY_OWNER;
+const repositoryName = repository?.split('/')[1] ?? '';
+const isUserOrOrgPages = repositoryName.toLowerCase() === `${repositoryOwner ?? ''}.github.io`.toLowerCase();
+const siteBase = process.env.VITEPRESS_BASE
+  || (repositoryName ? (isUserOrOrgPages ? '/' : `/${repositoryName}/`) : '/');
 
 export default withMermaid(defineConfig({
+  base: siteBase,
   lang: 'zh-CN',
   title: 'LuckyColor SaaS Docs',
   description: 'LuckyColor SaaS 系统介绍、使用说明、前后端开发与部署文档中心',
   cleanUrls: true,
   lastUpdated: true,
   head: [
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }]
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${siteBase}logo.svg` }]
   ],
   vite: {
     resolve: {
@@ -32,7 +39,7 @@ export default withMermaid(defineConfig({
     }
   },
   themeConfig: {
-    logo: '/logo.svg',
+    logo: `${siteBase}logo.svg`,
     search: {
       provider: 'local'
     },
