@@ -171,16 +171,21 @@ sequenceDiagram
     API-->>UI: captchaToken
     UI->>API: POST /api/auth/login
     API-->>UI: accessToken + user
-    UI->>API: GET /api/auth/access
-    API-->>UI: roles + menuTree + buttonCodeList
+    UI->>API: GET /api/menus/tree
+    API-->>UI: menuTree
 ```
 
 ### 页面初始化链路
 
-1. 前端拿到 Token 后调用 `/api/auth/access`
-2. 根据返回的 `menuTree` 初始化菜单与动态路由
-3. 根据 `buttonCodeList` 控制按钮显隐
-4. 页面业务数据再访问各自模块接口
+当前前端真实初始化链路建议按下面理解：
+
+1. 登录成功后，先用 `/api/auth/login` 返回的用户快照建立本地会话
+2. 再调用 `/api/menus/tree` 初始化菜单与动态路由
+3. 页面刷新后，通过 `/api/auth/profile` 恢复当前用户资料
+4. 如果本地没有菜单缓存，再重新调用 `/api/menus/tree`
+5. 页面业务数据再访问各自模块接口
+
+`/api/auth/access` 依然是完整访问快照接口，适合做权限联调、排查和后端语义统一出口，但当前前端默认初始化流程并不只依赖它。
 
 ### 租户创建链路
 
@@ -244,7 +249,7 @@ Swagger 是当前最准确的接口准绳，建议在以下场景优先查看：
 ## 前端联调建议
 
 - 前端尽量只写相对路径 `/api/*`。
-- 登录后优先调用 `/api/auth/access`，不要手写菜单。
+- 登录后优先确认 `/api/auth/login` 与 `/api/menus/tree` 都正常返回，不要手写菜单。
 - 本地联调时显式确认 `x-tenant-id` 是否正确。
 - 如果接口 403，不要只查 Token，还要查角色、菜单、数据权限和租户状态。
 

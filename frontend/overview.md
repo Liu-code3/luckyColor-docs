@@ -49,6 +49,13 @@ pnpm dev
 http://127.0.0.1:9900
 ```
 
+除了默认真实联调模式，当前前端还支持：
+
+- `pnpm dev:mock`
+- `pnpm dev:hybrid`
+
+如果你想看这三种模式和登录态恢复链路的详细说明，可以继续阅读 [会话恢复与联调模式](/frontend/session-and-api-modes)。
+
 ## 关键环境变量
 
 前端主要使用 `.env.dev` 和 `.env.prod`。
@@ -83,6 +90,12 @@ proxy: {
 - 业务代码里尽量只写 `/api` 相对路径。
 - 前端不需要在每个接口里硬编码完整域名。
 - 只要改 `VITE_API_PROXY_TARGET`，就可以切换联调环境。
+
+此外，前端仓库当前还支持：
+
+- `pnpm dev`：真实接口模式
+- `pnpm dev:mock`：本地 Mock 模式
+- `pnpm dev:hybrid`：Mock + 真实接口混合模式
 
 ## 目录结构与职责
 
@@ -128,7 +141,8 @@ luckyColor-admin/
 - 校验验证码
 - 用户名密码登录
 - 登录成功后写入 Token、用户信息和租户上下文
-- 刷新页面后恢复登录态和动态路由
+- 登录成功后再拉取 `/api/menus/tree` 初始化菜单与动态路由
+- 刷新页面后通过 `/api/auth/profile` 和本地菜单缓存恢复登录态与动态路由
 
 ### 2. 动态菜单与动态路由
 
@@ -235,6 +249,13 @@ x-tenant-id: tenant_001
 
 也就是说，前端当前已经和后端主要系统管理能力、租户能力和平台能力打通，而不是只接了一个登录页示例。
 
+需要额外说明的是，当前前端实际已使用或落地展示的能力还包括：
+
+- `file`：富文本图片上传等文件场景
+- `codegen`：前端代码生成器工作台与预览页
+
+其中代码生成器页面目前更偏前端工作台形态，适合演示页面骨架、字段配置和预览流程。
+
 ## 测试覆盖情况
 
 前端仓库内置了 Playwright 冒烟测试，主要覆盖：
@@ -283,7 +304,8 @@ pnpm preview
 
 优先检查：
 
-- `/api/auth/access` 是否返回了菜单树
+- `/api/auth/login` 是否返回了正常用户信息
+- `/api/menus/tree` 是否返回了菜单树
 - 当前租户是否正确
 - 登录账号是否绑定了角色与菜单
 
@@ -313,7 +335,8 @@ pnpm preview
 4. `src/utils/auth.ts` 和 `src/utils/auth-bootstrap.ts`
 5. `src/views/login/login.vue`
 6. `src/views/sys/*`
-7. `tests/playwright/smoke/*`
+7. `src/views/tool/codegen/*`
+8. `tests/playwright/smoke/*`
 
 ## 如果你想按模块顺着读代码
 

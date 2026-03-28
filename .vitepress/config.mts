@@ -60,7 +60,9 @@ export default withMermaid(defineConfig({
           text: '入门',
           items: [
             { text: '产品概述', link: '/guide/overview' },
-            { text: '快速开始', link: '/guide/quick-start' }
+            { text: '快速开始', link: '/guide/quick-start' },
+            { text: '文档补充清单', link: '/guide/doc-gap-checklist' },
+            { text: '核心关系说明', link: '/guide/domain-relationships' }
           ]
         }
       ],
@@ -92,7 +94,8 @@ export default withMermaid(defineConfig({
         {
           text: '权限与安全',
           items: [
-            { text: '角色权限说明', link: '/security/rbac' }
+            { text: '角色权限说明', link: '/security/rbac' },
+            { text: '身份边界矩阵', link: '/security/actor-boundary-matrix' }
           ]
         }
       ],
@@ -101,6 +104,7 @@ export default withMermaid(defineConfig({
           text: '前端',
           items: [
             { text: '前端说明', link: '/frontend/overview' },
+            { text: '会话恢复与联调模式', link: '/frontend/session-and-api-modes' },
             { text: '前端模块渐进式解读', link: '/frontend/module-walkthrough' }
           ]
         }

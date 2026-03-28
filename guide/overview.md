@@ -12,6 +12,8 @@ LuckyColor 是一套面向中后台场景的多租户 SaaS 管理平台。当前
 
 这套平台不是单一业务系统，而是一套可继续承载更多业务模块的“后台底座”。它已经实现了常见 SaaS 平台需要的账户、权限、菜单、租户、字典、配置、公告和工作台等能力。
 
+如果你当前最想快速厘清“租户、部门、角色、用户”之间的真实关系，可以直接继续阅读 [核心关系说明](/guide/domain-relationships)。
+
 ## 平台想解决的问题
 
 - 为多租户后台提供统一的登录、权限、租户隔离和系统管理能力。
@@ -34,7 +36,7 @@ LuckyColor 是一套面向中后台场景的多租户 SaaS 管理平台。当前
 | 系统配置 | 配置项管理与缓存刷新 | `src/views/sys/config` | `modules/system/configs` |
 | 通知公告 | 公告维护与工作台展示 | `src/views/sys/notice` | `modules/system/notices` |
 | 租户管理 | 租户列表、创建租户、默认资源初始化 | `src/views/sys/tenant` | `modules/tenant/tenants` |
-| 租户套餐 | 套餐维护与租户绑定 | `src/views/sys/tenantPackage` | `modules/tenant/tenant-packages` |
+| 租户套餐 | 套餐维护、能力开关、配额限制与租户绑定 | `src/views/sys/tenantPackage` | `modules/tenant/tenant-packages` |
 | 文件服务 | 文件上传、图片访问 | 上传组件与文件 API | `modules/platform/file` |
 | 平台附加能力 | 健康检查、偏好设置、水印、国际化、代码生成 | API 层与工具页 | `modules/platform/*` |
 
@@ -90,6 +92,8 @@ LuckyColor 当前采用“共享数据库、共享表、逻辑隔离”的多租
 - 租户识别优先级为请求头 `x-tenant-id`、域名后缀、登录态 Token、默认租户配置。
 - 创建租户时，系统会自动初始化管理员、角色、部门、菜单授权和基础字典。
 
+如果你想把这块关系看得更细，可以继续阅读 [核心关系说明](/guide/domain-relationships)。
+
 这意味着平台既适合本地开发时通过 Header 指定租户，也适合未来演进为二级域名租户模式。
 
 ## 适用场景
@@ -105,7 +109,8 @@ LuckyColor 当前采用“共享数据库、共享表、逻辑隔离”的多租
 2. 再看“系统架构总览”，理解请求是如何从前端进入后端和数据库的。
 3. 然后分别阅读“前端说明”和“后端说明”，对照真实仓库看目录和代码。
 4. 联调时配合“接口规范”“权限安全”“数据库设计”一起看。
-5. 准备部署或交付时重点查看“部署方案”章节。
+5. 如果你要搞清楚登录恢复、联调模式与 Mock/真实接口切换，继续看 [会话恢复与联调模式](/frontend/session-and-api-modes)。
+6. 准备部署或交付时重点查看“部署方案”章节。
 
 ## 后续维护建议
 
