@@ -124,6 +124,55 @@ luckyColor-admin/
 | `src/views/sys` | 平台业务页面主体都在这里 |
 | `tests/playwright/smoke` | 用来了解当前系统最重要的回归链路 |
 
+## 前端代码组织风格
+
+LuckyColor 前端的代码组织不是“页面想到哪写到哪”，而是比较标准的后台平台拆法。理解这件事以后，读代码会轻松很多。
+
+### 1. 先按职责分层，不先按页面堆逻辑
+
+它大致分成六层：
+
+| 层次 | 目录 | 说明 |
+| --- | --- | --- |
+| 运行配置层 | `src/config` | 默认账号、租户开关、主题配置、运行参数 |
+| 路由入口层 | `src/router` | 静态路由、守卫、动态路由恢复 |
+| 全局状态层 | `src/store` | 菜单、标签页、全局主题、布局状态 |
+| 平台壳层 | `src/layouts` | 后台框架外壳、导航、用户栏、面包屑 |
+| 业务页面层 | `src/views` | 用户真正操作的业务页面 |
+| 接口与工具层 | `src/api`、`src/utils` | 对后端接口映射、认证、菜单标准化、HTTP 封装 |
+
+这意味着一个功能通常不是只在一个 `.vue` 文件里结束，而是会沿着：
+
+页面 -> API -> store / utils -> 路由 / 布局
+
+这条线协同起来。
+
+### 2. 业务页面按领域放，通用能力横向抽
+
+前端并没有把所有东西都塞进 `src/views/sys`。它的思路是：
+
+- 业务页面按功能域放到 `views`
+- 全局体验能力提到 `layouts` 和 `store`
+- 请求与鉴权相关能力提到 `api` 和 `utils`
+- 租户、菜单、登录恢复这类跨页面逻辑，不放进单页组件里
+
+这是一种更适合 SaaS 后台长期维护的写法，因为登录态、菜单和租户上下文本来就不是某一个页面独有的事情。
+
+### 3. 页面和后端模块是镜像关系
+
+很多代码位置可以直接靠业务名去猜：
+
+| 前端页面或能力 | 前端落点 | 后端大致落点 |
+| --- | --- | --- |
+| 用户管理 | `src/views/sys/user.vue`、`src/api/users.ts` | `modules/system/users` |
+| 角色管理 | `src/views/sys/role/*`、`src/api/roles.ts` | `modules/system/roles` |
+| 菜单管理 | `src/views/sys/menu/*`、`src/api/menus.ts` | `modules/system/menus` |
+| 租户管理 | `src/views/sys/tenant/*`、`src/api/tenants.ts` | `modules/tenant/tenants` |
+| 租户套餐 | `src/views/sys/tenantPackage/*`、`src/api/tenantPackages.ts` | `modules/tenant/tenant-packages` |
+| 工作台 | `src/views/index/*`、`src/api/dashboard.ts` | `modules/platform/dashboard` |
+
+这也是为什么这套前端虽然页面多，但不算难找代码。
+
 ## 功能模块拆解
 
 ### 1. 登录与登录态恢复
@@ -212,6 +261,18 @@ luckyColor-admin/
 - `src/views/icomponent`
 - `src/views/iframe`
 - `src/views/tool/apifox`
+
+## 业务功能怎么顺着前端代码读
+
+如果你想把“业务功能说明”和“前端代码结构”对上，可以按这个顺序理解：
+
+1. 登录与权限初始化先看 `login.vue`、`auth.ts`、`auth-bootstrap.ts`。
+2. 菜单与动态路由先看 `router` 和 `store/modules/menu.ts`。
+3. 后台壳层体验先看 `App.vue`、`layouts`、`global` store。
+4. 具体系统管理能力再看 `views/sys/*` 和对应 `api/*.ts`。
+5. 工作台、工具页、文件上传等平台扩展能力最后看 `views/index`、`views/tool`、`components`。
+
+这条顺序的好处是，你会先理解“平台怎么跑起来”，再理解“某个页面怎么实现”，不会一上来就陷在某个表单组件里。
 
 ## 租户模式在前端怎么处理
 
