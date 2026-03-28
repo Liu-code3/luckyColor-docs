@@ -115,6 +115,8 @@ export default withMermaid(defineConfig({
           items: [
             { text: '后端说明', link: '/backend/overview' },
             { text: '后端模块渐进式解读', link: '/backend/module-walkthrough' },
+            { text: '模块调用路径图模板', link: '/backend/module-call-path-template' },
+            { text: 'users 模块调用路径', link: '/backend/users-call-path' },
             { text: '切换 Java 时的文档更新点', link: '/backend/java-migration' }
           ]
         }
