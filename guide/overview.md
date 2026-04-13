@@ -2,15 +2,18 @@
 
 ## 项目定位
 
-LuckyColor 是一套面向中后台场景的多租户 SaaS 管理平台。当前文档所对应的真实项目由三个部分组成：
+LuckyColor 是一套面向中后台场景的多租户 SaaS 管理平台。当前文档所对应的真实项目由四个部分组成：
 
 | 项目 | 位置 | 作用 |
 | --- | --- | --- |
 | `luckyColor-docs` | `https://github.com/Liu-code3/luckyColor-docs` | 文档站，基于 VitePress |
 | `luckyColor-admin` | `https://github.com/Liu-code3/luckyColor-admin` | 管理后台前端，基于 Vue 3 + Vite + TypeScript |
-| `luckyColor-admin-serve` | `https://github.com/Liu-code3/luckyColor-admin-serve` | 后端服务，基于 NestJS + Prisma + MySQL + Redis |
+| `luckyColor-admin-serve` | `https://github.com/Liu-code3/luckyColor-admin-serve` | NestJS 后端服务，基于 NestJS + Prisma + MySQL + Redis |
+| `luckycolor-admin-springboot` | `D:\zl\luckycolor-admin-springboot` | Spring Boot 后端服务，基于 Spring Boot + MyBatis-Plus + MySQL + Redis |
 
 这套平台不是单一业务系统，而是一套可继续承载更多业务模块的“后台底座”。它已经实现了常见 SaaS 平台需要的账户、权限、菜单、租户、字典、配置、公告和工作台等能力。
+
+当前项目的一个重要特点是：前端并不是只绑定某一套后端实现，而是已经支持在 `NestJS` 和 `Spring Boot` 两套接口服务之间切换，用于接口契约对齐、迁移验证和多实现并行维护。
 
 如果你当前最想快速厘清“租户、部门、角色、用户”之间的真实关系，可以直接继续阅读 [核心关系说明](/guide/domain-relationships)。
 
@@ -58,6 +61,8 @@ LuckyColor 是一套面向中后台场景的多租户 SaaS 管理平台。当前
 
 ### 后端
 
+#### NestJS 实现
+
 - NestJS 10
 - TypeScript
 - Prisma 5
@@ -66,20 +71,45 @@ LuckyColor 是一套面向中后台场景的多租户 SaaS 管理平台。当前
 - Swagger / OpenAPI
 - Jest 单元测试与 e2e 测试
 
+#### Spring Boot 实现
+
+- Spring Boot 3.5
+- Java 17
+- Spring Security
+- MyBatis-Plus 3.5.x
+- Flyway
+- MySQL 8.x
+- Redis 7.x
+- springdoc OpenAPI
+- JUnit 5 / Spring Boot Test
+
 ### 部署与交付
 
 - Nginx 反向代理
 - Docker Compose 示例编排
 - 前端静态资源部署
-- Node.js 进程或容器化运行后端服务
+- Node.js 进程、Java 进程或容器化运行后端服务
+
+## 双后端怎么理解
+
+可以把当前项目理解成“一个前端，对接两套后端实现”：
+
+- Spring Boot 更适合当前默认本地联调与 Java 技术栈交付场景。
+- NestJS 仍然保留，便于对照现有实现、验证接口契约和回看原始业务拆分方式。
+- 两套后端都尽量保持 `/api` 前缀、`x-tenant-id` 头、登录与权限快照语义一致。
+- 前端通过不同的 `Vite mode` 切换代理目标，而不是改业务代码后再手工替换接口。
+
+如果你主要是第一次接手项目，建议先从 Spring Boot 说明开始；如果你要对照历史实现或理解早期模块设计，再补看 NestJS 说明。
 
 ## 运行入口
 
 | 服务 | 默认地址 | 说明 |
 | --- | --- | --- |
 | 前端开发服务 | `http://127.0.0.1:9900` | Vite 本地开发服务 |
-| 后端接口 | `http://127.0.0.1:3001/api` | 全局前缀为 `/api` |
-| Swagger | `http://127.0.0.1:3001/docs` | 便于联调和接口核对 |
+| Spring Boot 接口 | `http://127.0.0.1:3001/api` | 前端 `pnpm dev` / `pnpm dev:springboot` 默认指向它 |
+| Spring Boot Swagger | `http://127.0.0.1:3001/api/docs` | 便于联调和接口核对 |
+| NestJS 接口 | `http://127.0.0.1:3002/api` | 前端 `pnpm dev:nestjs` 默认指向它 |
+| NestJS Swagger | `http://127.0.0.1:3002/docs` | 便于与 Spring Boot 对照接口契约 |
 | MySQL | `127.0.0.1:3306` | 后端默认数据库 |
 | Redis | `127.0.0.1:6379` | 字典缓存、验证码、辅助缓存等能力依赖 |
 
@@ -107,13 +137,15 @@ LuckyColor 当前采用“共享数据库、共享表、逻辑隔离”的多租
 
 1. 先看本页，搞清楚系统解决什么问题、有哪些模块。
 2. 再看“系统架构总览”，理解请求是如何从前端进入后端和数据库的。
-3. 然后分别阅读“前端说明”和“后端说明”，对照真实仓库看目录和代码。
-4. 联调时配合“接口规范”“权限安全”“数据库设计”一起看。
-5. 如果你要搞清楚登录恢复、联调模式与 Mock/真实接口切换，继续看 [会话恢复与联调模式](/frontend/session-and-api-modes)。
-6. 准备部署或交付时重点查看“部署方案”章节。
+3. 然后阅读“前端说明”以及“Spring Boot 后端说明”或“NestJS 后端说明”，对照真实仓库看目录和代码。
+4. 如果准备顺着真实后端代码继续深入，再进入对应的“模块渐进式解读”。
+5. 联调时配合“接口规范”“权限安全”“数据库设计”一起看。
+6. 如果你要搞清楚登录恢复、联调模式与 Mock/真实接口切换，继续看 [会话恢复与联调模式](/frontend/session-and-api-modes)。
+7. 准备部署或交付时重点查看“部署方案”章节。
 
 ## 后续维护建议
 
 - 新增业务模块时，同时补充前端页面、后端模块、数据库表和接口说明四处文档。
 - 修改默认端口、环境变量或部署方式时，优先更新“快速开始”和“部署方案”。
-- 如果后端后续改为 Java，请同步阅读并更新 [切换 Java 时的文档更新点](/backend/java-migration)。
+- 如果 Spring Boot 与 NestJS 之间出现契约差异，优先同步更新“产品概述”“快速开始”“后端说明”和“接口规范”。
+- 如果后续继续把 NestJS 能力迁移到 Java，请同步阅读并更新 [切换 Java 时的文档更新点](/backend/java-migration)。

@@ -5,6 +5,7 @@
 本地部署的目标不是做正式上线，而是让你在一台机器上稳定完成：
 
 - 前后端启动
+- 选择 Spring Boot 或 NestJS 作为后端实现
 - 数据库初始化
 - 登录验证
 - 菜单与系统管理联调
@@ -14,8 +15,9 @@
 
 | 依赖 | 建议版本 | 说明 |
 | --- | --- | --- |
-| Node.js | 20+ | 前后端都依赖 |
-| pnpm | 8+ | 包管理器 |
+| Node.js | 20+ | 前端与 NestJS 依赖 |
+| pnpm | 8+ | 前端与 NestJS 包管理器 |
+| JDK | 17+ | Spring Boot 依赖 |
 | MySQL | 8.x | 主数据库 |
 | Redis | 7.x | 缓存与验证码依赖 |
 | Docker | 可选 | 推荐用于启动 MySQL |
@@ -26,8 +28,8 @@
 
 1. 启动 MySQL
 2. 准备 Redis
-3. 初始化后端
-4. 启动后端
+3. 选择后端实现
+4. 初始化并启动后端
 5. 启动前端
 6. 验证 Swagger、健康检查、登录页和系统页面
 
@@ -43,8 +45,10 @@ docker compose up -d
 
 - 容器名：`luckycolor-admin-mysql`
 - 端口：`3306`
-- 数据库：`luckycolor_admin`
+- 默认数据库：`luckycolor_admin`
 - root 密码：`123456`
+
+如果你准备联调 Spring Boot，请额外创建：`luckycolor_admin_sb`。
 
 ## 第二步：准备 Redis
 
@@ -60,7 +64,28 @@ docker compose up -d
 REDIS_URL="redis://127.0.0.1:6379"
 ```
 
-## 第三步：初始化并启动后端
+## 第三步：选择后端实现
+
+| 实现 | 仓库位置 | 默认联调端口 | 前端模式 |
+| --- | --- | --- | --- |
+| Spring Boot | `D:\zl\luckycolor-admin-springboot` | `3001` | `pnpm dev` / `pnpm dev:springboot` |
+| NestJS | `D:\zl\luckyColor-admin-serve` | `3002` | `pnpm dev:nestjs` |
+
+## 第四步：初始化并启动后端
+
+### Spring Boot
+
+```powershell
+cd D:\zl\luckycolor-admin-springboot
+.\mvnw.cmd spring-boot:run
+```
+
+启动后优先验证：
+
+- Swagger：`http://127.0.0.1:3001/api/docs`
+- 健康检查：`http://127.0.0.1:3001/api/health`
+
+### NestJS
 
 ```powershell
 cd D:\zl\luckyColor-admin-serve
@@ -70,6 +95,8 @@ pnpm db:setup
 pnpm dev
 ```
 
+建议把 `.env` 中 `PORT` 改成 `3002`，与 Spring Boot 的 `3001` 区分开。
+
 ### 初始化完成后会得到
 
 - 默认租户：`tenant_001`
@@ -78,15 +105,21 @@ pnpm dev
 
 ### 启动后优先验证
 
-- Swagger：`http://127.0.0.1:3001/docs`
-- 健康检查：`http://127.0.0.1:3001/api/health`
+- Swagger：`http://127.0.0.1:3002/docs`
+- 健康检查：`http://127.0.0.1:3002/api/health`
 
-## 第四步：启动前端
+## 第五步：启动前端
 
 ```powershell
 cd D:\zl\luckyColor-admin
 pnpm install
-pnpm dev
+pnpm dev:springboot
+```
+
+如果你当前联调的是 NestJS，请执行：
+
+```powershell
+pnpm dev:nestjs
 ```
 
 默认访问地址：
@@ -95,7 +128,7 @@ pnpm dev
 http://127.0.0.1:9900
 ```
 
-## 第五步：联调验证
+## 第六步：联调验证
 
 建议按下面顺序检查：
 
@@ -109,17 +142,18 @@ http://127.0.0.1:9900
 
 ### 前端
 
-`D:\zl\luckyColor-admin\.env.dev` 中默认已经配置：
+`D:\zl\luckyColor-admin` 当前主要通过模式文件切换后端：
 
-- `VITE_API_PROXY_TARGET=http://127.0.0.1:3001`
-- `VITE_API_DOC_URL=http://127.0.0.1:3001/docs`
+- `pnpm dev` 默认等价于 `pnpm dev:springboot`
+- `.env.springboot` 指向 `http://127.0.0.1:3001`
+- `.env.nestjs` 指向 `http://127.0.0.1:3002`
 - `VITE_TENANT_ID=tenant_001`
 - `VITE_LOGIN_CAPTCHA_ENABLED=true`
 - `VITE_TENANT_ENABLED=true`
 
 ### 后端
 
-`D:\zl\luckyColor-admin-serve\.env` 里至少要确认：
+NestJS `D:\zl\luckyColor-admin-serve\.env` 里至少要确认：
 
 - `DATABASE_URL`
 - `JWT_SECRET`
@@ -128,15 +162,27 @@ http://127.0.0.1:9900
 - `TENANT_ENABLED`
 - `TENANT_HEADER`
 
+Spring Boot `application.yml` 或环境变量里至少要确认：
+
+- `SERVER_PORT`
+- `DB_NAME`
+- `DB_USERNAME`
+- `DB_PASSWORD`
+- `REDIS_HOST`
+- `JWT_SECRET`
+- `TENANT_ENABLED`
+- `TENANT_HEADER`
+
 ## 常见问题
 
 ### 前端能打开，但接口都是 404
 
-检查这三件事：
+检查这几件事：
 
-1. 后端是否真的启动在 `3001`
-2. 前端 `VITE_API_PROXY_TARGET` 是否还是 `http://127.0.0.1:3001`
-3. 后端是否统一使用 `/api` 前缀
+1. 后端是否真的启动在当前模式对应端口
+2. 前端是否启动了正确的模式
+3. 前端 `VITE_API_PROXY_TARGET` 是否还是当前后端地址
+4. 后端是否统一使用 `/api` 前缀
 
 ### `pnpm db:setup` 报数据库连接失败
 
@@ -159,9 +205,10 @@ http://127.0.0.1:9900
 
 检查：
 
-- `.env` 中 `SWAGGER_ENABLED=true`
+- 如果是 NestJS：`.env` 中 `SWAGGER_ENABLED=true`
+- 如果是 Spring Boot：确认访问路径是 `/api/docs`
 - 后端端口是否冲突
-- 启动日志里是否有环境变量校验报错
+- 启动日志里是否有环境变量或数据库初始化报错
 
 ### 页面刷新后 404
 

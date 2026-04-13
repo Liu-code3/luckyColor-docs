@@ -1,8 +1,17 @@
-# 后端说明
+# NestJS 后端说明
+
+## 先说明当前项目的后端格局
+
+LuckyColor 现在不是只有一套后端，而是同时维护：
+
+- `NestJS` 实现：仓库 `D:\zl\luckyColor-admin-serve`
+- `Spring Boot` 实现：仓库 `D:\zl\luckycolor-admin-springboot`
+
+本页聚焦 NestJS 版本。如果你当前主要使用 Java 技术栈或默认前端联调模式，请优先阅读 [Spring Boot 后端说明](/backend/springboot-overview)。
 
 ## 项目位置
 
-后端项目目录：
+NestJS 后端项目目录：
 
 ```text
 D:\zl\luckyColor-admin-serve
@@ -31,12 +40,14 @@ LuckyColor 后端不是简单的数据增删改查接口，它承担的是整个
 
 ## 启动入口与对外地址
 
-默认情况下，后端启动后会暴露：
+单独运行 NestJS 时，默认端口通常仍是 `3001`；但如果你要和 Spring Boot 同时本地联调，建议把 NestJS 的 `PORT` 调整为 `3002`。
+
+按当前前端仓库的双后端联调约定，NestJS 启动后推荐暴露：
 
 | 类型 | 地址 | 说明 |
 | --- | --- | --- |
-| API 基地址 | `http://127.0.0.1:3001/api` | 全局前缀固定为 `/api` |
-| Swagger | `http://127.0.0.1:3001/docs` | 启用 `SWAGGER_ENABLED=true` 时可访问 |
+| API 基地址 | `http://127.0.0.1:3002/api` | 双后端联调时推荐使用 `3002` |
+| Swagger | `http://127.0.0.1:3002/docs` | 启用 `SWAGGER_ENABLED=true` 时可访问 |
 | 健康检查 | `GET /api/health` | 验证服务和数据库是否可用 |
 
 ## 环境变量
@@ -45,7 +56,7 @@ LuckyColor 后端不是简单的数据增删改查接口，它承担的是整个
 
 | 变量 | 默认值 | 说明 |
 | --- | --- | --- |
-| `PORT` | `3001` | 应用监听端口 |
+| `PORT` | `3001` | 单独运行默认端口，双后端联调建议改成 `3002` |
 | `DATABASE_URL` | `mysql://root:123456@127.0.0.1:3306/luckycolor_admin?charset=utf8mb4` | MySQL 连接串 |
 | `JWT_SECRET` | `replace-with-a-strong-secret` | JWT 密钥，生产必须替换 |
 | `JWT_EXPIRES_IN` | `2h` | 登录态有效期 |
@@ -69,6 +80,8 @@ Copy-Item .env.example .env
 pnpm db:setup
 pnpm dev
 ```
+
+如果你要和 Spring Boot 并存联调，记得先把 `.env` 里的 `PORT` 改成 `3002`。
 
 如果只想构建生产产物：
 
@@ -371,8 +384,8 @@ D:\zl\luckyColor-admin-serve\prisma\schema.prisma
 
 ## 后续如果切换为 Java
 
-当前文档已经额外整理了 [切换 Java 时的文档更新点](/backend/java-migration)。如果未来后端从 NestJS 迁移到 Spring Boot 或其他 Java 方案，建议优先按那份清单逐页同步更新，避免只改代码不改文档。
+当前文档已经额外整理了 [切换 Java 时的文档更新点](/backend/java-migration)。虽然项目里已经有 Spring Boot 实现，但如果你还在持续把 NestJS 能力对齐到 Java，仍然建议优先按那份清单逐页同步更新，避免只改代码不改文档。
 
 ## 如果你想按模块顺着读代码
 
-可以继续阅读 [后端模块渐进式解读](/backend/module-walkthrough)。那一页会按“模块解决什么问题、主要 controller/service 在哪里、关键表是什么、前端对应什么页面、改功能先看哪里”的顺序展开，更适合新人上手和内部讲解。
+可以继续阅读 [NestJS 后端模块渐进式解读](/backend/module-walkthrough)。那一页会按“模块解决什么问题、主要 controller/service 在哪里、关键表是什么、前端对应什么页面、改功能先看哪里”的顺序展开，更适合新人上手和内部讲解。

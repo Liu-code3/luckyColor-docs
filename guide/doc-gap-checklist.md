@@ -42,7 +42,7 @@
 - 登录后前端真实初始化链路
 - 页面刷新后如何恢复用户信息、租户上下文和菜单缓存
 - `/api/auth/access`、`/api/auth/profile`、`/api/menus/tree` 各自承担什么职责
-- `pnpm dev`、`pnpm dev:mock`、`pnpm dev:hybrid` 三种联调模式的区别
+- `pnpm dev`、`pnpm dev:springboot`、`pnpm dev:nestjs` 三种入口命令各自对应什么后端模式
 
 ### 4. 现有页面中的关键修订
 
@@ -116,7 +116,8 @@
 如果未来数据权限模型新增“租户全部”“项目级”“门店级”等维度，建议同步更新：
 
 - [核心关系说明](/guide/domain-relationships)
-- [后端模块渐进式解读](/backend/module-walkthrough)
+- [NestJS 后端模块渐进式解读](/backend/module-walkthrough)
+- [Spring Boot 后端模块渐进式解读](/backend/springboot-module-walkthrough)
 - [权限安全](/security/rbac)
 
 ## 推荐维护方式

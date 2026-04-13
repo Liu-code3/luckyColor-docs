@@ -22,16 +22,16 @@ features:
   - title: 面向接手与交付
     details: 不只解释技术栈，还会说明功能模块、协作边界、启动顺序、联调链路、部署步骤与常见故障。
   - title: 前后端一体化
-    details: 同时覆盖 Vue 3 管理端、NestJS 多租户后端、Prisma 数据模型、Swagger 接口规范与 Nginx 反向代理方案。
+    details: 同时覆盖 Vue 3 管理端、NestJS 与 Spring Boot 两套后端实现、数据库模型、Swagger / OpenAPI 接口规范与 Nginx 反向代理方案。
   - title: 便于后续迁移
-    details: 额外提供“后端切换 Java 时的文档更新清单”，方便未来技术栈调整时快速同步所有关键文档。
+    details: 既提供 Spring Boot 独立说明，也保留 NestJS 向 Java 迁移时的文档更新清单，方便双实现并行维护。
 ---
 
 ## 这套文档解决什么问题
 
 - 帮助第一次接触 LuckyColor 的开发、测试、运维、实施同学快速看懂系统全貌。
 - 帮助交付人员明确每个功能模块在前端、后端、数据库中的落点。
-- 帮助部署人员理解本地启动、单机生产部署、Docker Compose 部署与 Nginx / HTTPS 配置。
+- 帮助部署人员理解 Spring Boot / NestJS 两套后端的本地启动、单机生产部署、Docker Compose 部署与 Nginx / HTTPS 配置。
 - 帮助后续维护者在修改接口、数据库或更换后端技术栈时同步更新文档。
 
 ## 推荐阅读顺序
@@ -45,11 +45,11 @@ features:
 ## 文档覆盖范围
 
 - 产品定位、适用场景、功能地图
-- 前后端项目结构、启动方式、环境变量与模块职责
+- 前后端项目结构、双后端启动方式、环境变量与模块职责
 - 多租户、RBAC、数据权限与系统日志设计
 - 数据库模型、初始化数据与常用索引思路
 - 本地部署、单机生产部署、Docker Compose、Nginx / HTTPS、故障排查
-- 后端从 NestJS 切换到 Java 时需要同步更新的文档项
+- Spring Boot 独立说明，以及后端从 NestJS 对齐到 Java 时需要同步更新的文档项
 
 ## 适合谁阅读
 

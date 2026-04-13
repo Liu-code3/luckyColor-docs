@@ -4,6 +4,8 @@
 
 生产环境推荐采用“前端静态资源 + 后端应用服务 + 独立 MySQL + 独立 Redis + Nginx 统一入口”的拆分方式。
 
+如果你当前部署的是 Java 版本，建议配合阅读 [Spring Boot 部署说明](/deployment/springboot)。那一页会把 Jar、`systemd`、`prod profile`、Flyway 和 Swagger 暴露策略单独讲清楚。
+
 推荐原因：
 
 - 前端和后端职责清晰，便于独立发布
@@ -28,7 +30,7 @@
 | --- | --- |
 | Nginx | 统一域名入口、HTTPS 终止、静态资源服务、接口反代 |
 | Admin 静态站点 | 托管前端 `dist` 产物 |
-| Server | 运行 NestJS API |
+| Server | 运行当前选择的后端 API（Spring Boot 或 NestJS） |
 | MySQL | 持久化业务主数据 |
 | Redis | 验证码和缓存能力 |
 
@@ -52,11 +54,22 @@ pnpm build
 
 - `VITE_BUILD_PUBLIC_PATH` 是否和线上访问路径一致
 - Nginx 是否为单页应用配置了 `try_files`
-- `/api` 和 `/docs` 是否反代到后端
+- `/api` 和 `/docs` 是否反代到当前后端实现
 
 ## 后端发布流程
 
-在后端仓库执行：
+如果你部署 Spring Boot，请在 `D:\zl\luckycolor-admin-springboot` 执行 `.\mvnw.cmd clean package` 或 `.\mvnw.cmd spring-boot:run`；如果你部署 NestJS，则在 `D:\zl\luckyColor-admin-serve` 执行下面这些命令：
+
+### Spring Boot
+
+推荐流程：
+
+1. `./mvnw.cmd clean package`
+2. 上传 `target/*.jar`
+3. 通过环境变量文件注入 `prod` 配置
+4. 使用 `systemd` 或容器运行 `java -jar`
+
+### NestJS
 
 ```powershell
 cd D:\zl\luckyColor-admin-serve
@@ -76,7 +89,7 @@ pnpm db:setup
 pnpm start:prod
 ```
 
-生产环境建议使用 `pm2` 或 `systemd` 托管进程，而不是直接在终端里挂着。
+生产环境建议使用 `systemd` 托管 Spring Boot，使用 `pm2` 或 `systemd` 托管 NestJS，而不是直接在终端里挂着。
 
 ## Nginx 反向代理示例
 
@@ -102,11 +115,13 @@ server {
     }
 
     location /docs/ {
-        proxy_pass http://127.0.0.1:3001/docs/;
+        proxy_pass http://127.0.0.1:3001/api/docs/;
         proxy_set_header Host $host;
     }
 }
 ```
+
+上面这段示例默认按 Spring Boot 本地端口 `3001` 编写；如果你线上运行的是 NestJS，请把 `/docs/` 的反代目标改成对应服务的 `/docs/`。
 
 ## 生产环境必须替换的默认项
 

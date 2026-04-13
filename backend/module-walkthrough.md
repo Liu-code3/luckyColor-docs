@@ -1,4 +1,4 @@
-# 后端模块渐进式解读
+# NestJS 后端模块渐进式解读
 
 ## 怎么读这篇文档
 
@@ -9,7 +9,7 @@
 3. 再进入每个模块内部，看 controller、service、数据表和前端页面怎么对应
 4. 最后告诉你如果要改功能，应该先从哪里下手
 
-如果你是第一次接手 LuckyColor，建议和 [后端说明](/backend/overview) 配合着看。
+如果你是第一次接手 LuckyColor，建议和 [NestJS 后端说明](/backend/overview) 配合着看。如果你当前主要阅读 Java 版本，请改看 [Spring Boot 后端模块渐进式解读](/backend/springboot-module-walkthrough)。
 
 ## 第一层：先把后端看成一个“平台大脑”
 

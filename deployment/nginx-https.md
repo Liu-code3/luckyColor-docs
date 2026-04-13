@@ -17,6 +17,8 @@ LuckyColor 前端是单页应用，后端是独立 API 服务，因此正式部�
 | `https://admin.example.com/api/` | 后端接口 |
 | `https://admin.example.com/docs/` | Swagger 文档 |
 
+下面示例默认按 Spring Boot 本地端口 `3001` 编写。如果你部署的是 NestJS，请把 Swagger 的目标地址改成实际服务的 `/docs`。
+
 ## 最关键的三个配置点
 
 ### 1. 单页应用回退
@@ -46,7 +48,7 @@ location /api/ {
 
 ```nginx
 location /docs/ {
-    proxy_pass http://127.0.0.1:3001/docs/;
+    proxy_pass http://127.0.0.1:3001/api/docs/;
     proxy_set_header Host $host;
 }
 ```
@@ -88,7 +90,7 @@ server {
     }
 
     location /docs/ {
-        proxy_pass http://127.0.0.1:3001/docs/;
+        proxy_pass http://127.0.0.1:3001/api/docs/;
         proxy_set_header Host $host;
     }
 }

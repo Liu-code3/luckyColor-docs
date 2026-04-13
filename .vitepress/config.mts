@@ -78,7 +78,8 @@ export default withMermaid(defineConfig({
         {
           text: '接口',
           items: [
-            { text: '接口规范', link: '/api/spec' }
+            { text: '接口规范', link: '/api/spec' },
+            { text: '双后端契约对照', link: '/api/contract-comparison' }
           ]
         }
       ],
@@ -113,8 +114,10 @@ export default withMermaid(defineConfig({
         {
           text: '后端',
           items: [
-            { text: '后端说明', link: '/backend/overview' },
-            { text: '后端模块渐进式解读', link: '/backend/module-walkthrough' },
+            { text: 'NestJS 后端说明', link: '/backend/overview' },
+            { text: 'Spring Boot 后端说明', link: '/backend/springboot-overview' },
+            { text: 'NestJS 模块渐进式解读', link: '/backend/module-walkthrough' },
+            { text: 'Spring Boot 模块渐进式解读', link: '/backend/springboot-module-walkthrough' },
             { text: '模块调用路径图模板', link: '/backend/module-call-path-template' },
             { text: 'users 模块调用路径', link: '/backend/users-call-path' },
             { text: '切换 Java 时的文档更新点', link: '/backend/java-migration' }
@@ -127,6 +130,7 @@ export default withMermaid(defineConfig({
           items: [
             { text: '本地部署', link: '/deployment/local' },
             { text: '生产部署方案', link: '/deployment/production' },
+            { text: 'Spring Boot 部署说明', link: '/deployment/springboot' },
             { text: 'Docker Compose 完整部署', link: '/deployment/docker-compose' },
             { text: 'Nginx / HTTPS 配置', link: '/deployment/nginx-https' },
             { text: '拓扑建议', link: '/deployment/topologies' },

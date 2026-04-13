@@ -2,7 +2,7 @@
 
 ## 架构一句话概括
 
-LuckyColor 采用典型的前后端分离架构：前端负责登录、菜单、页面交互和权限显隐，后端负责认证鉴权、租户隔离、业务处理和数据访问，MySQL 承载主数据，Redis 提供缓存与辅助能力，Nginx 负责统一入口与反向代理。
+LuckyColor 采用典型的前后端分离架构：前端负责登录、菜单、页面交互和权限显隐，后端负责认证鉴权、租户隔离、业务处理和数据访问，MySQL 承载主数据，Redis 提供缓存与辅助能力，Nginx 负责统一入口与反向代理。当前后端已经同时存在 NestJS 与 Spring Boot 两套实现，前端通过不同联调模式切换目标服务。
 
 ## 运行架构图
 
@@ -11,7 +11,7 @@ flowchart LR
     User[浏览器用户]
     Admin[Vue 3 Admin]
     Nginx[Nginx / Vite Dev Proxy]
-    Api[NestJS API]
+    Api[Backend API<br/>NestJS / Spring Boot]
     Mysql[(MySQL 8)]
     Redis[(Redis 7)]
     Storage[本地文件存储]
@@ -26,15 +26,16 @@ flowchart LR
     Swagger --> Api
 ```
 
-## 三个仓库的关系
+## 四个仓库的关系
 
 | 仓库 | 位置 | 主要职责 |
 | --- | --- | --- |
 | `luckyColor-docs` | `https://github.com/Liu-code3/luckyColor-docs` | 维护产品、技术与部署文档 |
 | `luckyColor-admin` | `https://github.com/Liu-code3/luckyColor-admin` | 渲染后台页面、处理菜单路由、调用接口 |
-| `luckyColor-admin-serve` | `https://github.com/Liu-code3/luckyColor-admin-serve` | 输出 REST API、权限校验、租户隔离、数据库读写 |
+| `luckyColor-admin-serve` | `https://github.com/Liu-code3/luckyColor-admin-serve` | NestJS 实现，输出 REST API、权限校验、租户隔离、数据库读写 |
+| `luckycolor-admin-springboot` | `D:\zl\luckycolor-admin-springboot` | Spring Boot 实现，输出与前端兼容的 REST API、权限校验、租户隔离、数据库读写 |
 
-文档站不是独立存在的，它描述的是这两个真实业务仓库的协作方式。
+文档站不是独立存在的，它描述的是这几个真实仓库之间的协作方式。
 
 ## 项目组织架构怎么理解
 
@@ -42,7 +43,7 @@ flowchart LR
 
 1. `luckyColor-docs` 负责把产品规则、技术结构、部署方式和协作口径讲清楚。
 2. `luckyColor-admin` 负责把后端返回的菜单、权限、租户上下文和业务数据变成可操作页面。
-3. `luckyColor-admin-serve` 负责把认证、权限、租户隔离、数据库读写和平台业务规则真正执行起来。
+3. `luckyColor-admin-serve` 和 `luckycolor-admin-springboot` 分别用 Node.js 与 Java 技术栈实现同一套后台规则与接口能力。
 
 可以把它理解成：
 
@@ -60,7 +61,7 @@ flowchart LR
 sequenceDiagram
     participant Browser as 浏览器
     participant Frontend as Admin Frontend
-    participant Backend as NestJS API
+    participant Backend as Backend API
     participant Redis as Redis
     participant DB as MySQL
 
@@ -103,7 +104,7 @@ luckyColor-admin/
 
 前端核心特点：
 
-- 开发环境通过 `vite.config.ts` 将 `/api` 代理到 `http://127.0.0.1:3001`。
+- 开发环境通过 `vite.config.ts` 将 `/api` 代理到当前模式对应的后端，默认 `pnpm dev` 指向 `http://127.0.0.1:3001`，`pnpm dev:nestjs` 指向 `http://127.0.0.1:3002`。
 - 动态菜单由后端返回，前端 `menu` store 负责标准化、缓存与注册动态路由。
 - 登录后会拉取当前用户权限快照，再决定菜单、按钮和标签页行为。
 - 默认支持租户 Header 透传，开发环境会自动带 `x-tenant-id: tenant_001`。
@@ -124,6 +125,13 @@ luckyColor-admin/
 这种风格的重点不是“页面写得多快”，而是“业务规模变大以后，页面、路由、状态和接口还能不能继续清楚”。
 
 ## 后端架构拆分
+
+当前后端有两套实现：
+
+- `NestJS`：适合回看原始模块拆分、Prisma 数据模型与既有 Node.js 工程组织。
+- `Spring Boot`：适合当前默认联调、Java 技术栈交付与长期维护。
+
+两套实现都尽量保持 `/api`、`x-tenant-id`、登录鉴权、权限快照与动态菜单契约稳定。
 
 ```text
 luckyColor-admin-serve/
@@ -163,6 +171,8 @@ luckyColor-admin-serve/
 - 先按业务边界分清模块，再在模块内部继续分 controller、service、dto。
 - 业务代码不会和 Prisma、Redis、租户上下文细节混在一起。
 - 新人既可以按“模块”看，也可以按“请求流转”看。
+
+如果你当前主要使用 Spring Boot，可继续阅读 [Spring Boot 后端说明](/backend/springboot-overview)；如果你要对照既有 Node.js 实现，再阅读 [NestJS 后端说明](/backend/overview)。
 
 ## 数据与缓存职责
 
@@ -235,8 +245,8 @@ Redis 当前主要承担：
 在生产环境里，通常会把 Vite 开发代理替换成 Nginx：
 
 - `/` 指向前端构建后的静态资源
-- `/api/` 反代到后端 `3001`
-- `/docs/` 反代到 Swagger
+- `/api/` 反代到当前使用的后端服务
+- Swagger 入口按实现不同可能是 `/api/docs` 或 `/docs`
 - HTTPS 在 Nginx 层终止
 
 如果是 Docker Compose 方案，则常见容器包括 `mysql`、`redis`、`server`、`admin`、`nginx`。
@@ -251,7 +261,7 @@ Redis 当前主要承担：
 
 如果你是第一次接手 LuckyColor，最顺手的路径不是直接钻进某个目录，而是按下面顺序：
 
-1. 先看本页，建立“三个仓库怎么协作”的大图。
+1. 先看本页，建立“四个仓库怎么协作”的大图。
 2. 再看 [产品概述](/guide/overview)，知道平台到底提供了哪些业务能力。
 3. 然后看 [前端说明](/frontend/overview)，理解页面、路由、菜单、状态是怎么组织的。
 4. 接着看 [后端说明](/backend/overview)，理解模块、权限、租户和数据库是怎么组织的。

@@ -9,6 +9,8 @@
 - 小规模生产环境
 - 希望用一套编排快速拉起全栈服务的场景
 
+如果你当前重点部署的是 Java 版本，建议同时阅读 [Spring Boot 部署说明](/deployment/springboot)。当前文档仓库里的容器示例文件仍然是按 NestJS 后端编写的。
+
 ## 方案包含哪些容器
 
 完整部署通常包括：
@@ -23,9 +25,13 @@
 
 - `examples/deploy/docker-compose.prod.yml`
 - `examples/deploy/server.Dockerfile`
+- `examples/deploy/docker-compose.springboot.prod.yml`
+- `examples/deploy/server.springboot.Dockerfile`
 - `examples/deploy/admin.Dockerfile`
 - `examples/deploy/nginx/default.conf`
 - `examples/deploy/nginx/https.conf`
+- `examples/deploy/nginx/default.springboot.conf`
+- `examples/deploy/nginx/https.springboot.conf`
 
 ## 建议的部署目录
 
@@ -69,9 +75,10 @@
 
 ### `server`
 
-- 从后端仓库构建镜像
-- 启动 LuckyColor NestJS API
-- 使用环境变量连接 MySQL 和 Redis
+- 可以从 NestJS 或 Spring Boot 后端仓库构建镜像
+- 当前文档仓库同时提供 Node 版和 Java 版 Dockerfile 示例
+- 通过环境变量连接 MySQL 和 Redis
+- Spring Boot 示例为了测试方便，额外覆盖了 Swagger 开关
 
 ### `admin`
 
@@ -92,10 +99,14 @@
 建议把下面这些文件复制出来再改：
 
 - `docker-compose.prod.yml`
+- `docker-compose.springboot.prod.yml`
 - `server.Dockerfile`
+- `server.springboot.Dockerfile`
 - `admin.Dockerfile`
 - `default.conf`
+- `default.springboot.conf`
 - `https.conf`
+- `https.springboot.conf`
 
 ### 2. 修改关键配置
 
@@ -124,6 +135,8 @@ docker compose -f docker-compose.prod.yml exec server pnpm prisma:db:push
 docker compose -f docker-compose.prod.yml exec server pnpm prisma:seed
 ```
 
+如果你部署的是 Spring Boot，不需要执行 Prisma 命令，而是要在镜像中运行打包后的 Jar，并依赖 Flyway 在启动时自动迁移数据库。
+
 ### 5. 验证入口
 
 - 前端入口：`http://<host>/`
@@ -132,12 +145,12 @@ docker compose -f docker-compose.prod.yml exec server pnpm prisma:seed
 
 ## 需要特别注意的路径问题
 
-示例 `docker-compose.prod.yml` 使用了这样的构建上下文：
+NestJS 示例 `docker-compose.prod.yml` 使用了这样的构建上下文：
 
 - `../../../luckyColor-admin`
 - `../../../luckyColor-admin-serve`
 
-这说明示例默认假设部署目录和三个仓库之间有特定相对关系。实际落地时，这通常不是你服务器上的真实路径，所以必须手动调整。
+Spring Boot 示例 `docker-compose.springboot.prod.yml` 也有相同问题，它默认假设部署目录和文档仓库、前端仓库、Spring Boot 后端仓库之间有特定相对关系。实际落地时，这通常不是你服务器上的真实路径，所以必须手动调整。
 
 如果这里不改，最常见的结果就是：
 
@@ -155,6 +168,10 @@ docker compose -f docker-compose.prod.yml exec server pnpm prisma:seed
 - `/api/` 到 `server`
 - `/docs/` 到 `server`
 
+### `default.springboot.conf`
+
+职责和 `default.conf` 一样，但 Swagger 反代目标改成了 Spring Boot 的 `/api/docs/`。
+
 ### `https.conf`
 
 负责 HTTPS 域名场景，但示例中的证书路径是占位值：
@@ -166,6 +183,10 @@ docker compose -f docker-compose.prod.yml exec server pnpm prisma:seed
 
 实际部署时必须替换成自己的域名和证书挂载路径。
 
+### `https.springboot.conf`
+
+和 `https.conf` 类似，但默认按 Spring Boot 的 Swagger 地址 `/api/docs/` 编写。
+
 ## 容器化部署的优点
 
 - 搭环境更快
@@ -176,7 +197,8 @@ docker compose -f docker-compose.prod.yml exec server pnpm prisma:seed
 ## 容器化部署的限制
 
 - 当前示例更接近“可运行样板”，不是完整生产模板
-- 数据库迁移和首次初始化仍需要手动执行
+- NestJS 版本数据库迁移和首次初始化仍需要手动执行
+- Spring Boot 版本需要你自己补 Java 镜像与 Compose 服务定义
 - 文件上传目录、证书管理、日志采集、高可用还需要你自己补齐
 
 ## 上线前建议补充

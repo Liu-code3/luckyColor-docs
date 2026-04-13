@@ -37,8 +37,9 @@
 优先检查：
 
 - 后端是否真的启动成功
-- `SWAGGER_ENABLED` 是否为 `true`
-- `http://127.0.0.1:3001/docs` 是否能直接访问
+- 如果是 NestJS：`SWAGGER_ENABLED` 是否为 `true`
+- 如果是 Spring Boot：`http://127.0.0.1:3001/api/docs` 是否能直接访问
+- 如果是 NestJS：`http://127.0.0.1:3002/docs` 是否能直接访问
 - 如果有 Nginx，`/docs/` 代理是否正确
 
 ## 现象四：前端能打开，但接口全部失败
@@ -46,7 +47,7 @@
 优先检查：
 
 - 前端 `VITE_API_PROXY_TARGET` 是否正确
-- 后端是否监听 `3001`
+- 后端是否监听当前模式对应端口
 - 后端接口是否都带 `/api`
 - 浏览器请求是走开发代理，还是走线上 Nginx
 

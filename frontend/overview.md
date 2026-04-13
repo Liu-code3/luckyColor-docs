@@ -49,21 +49,21 @@ pnpm dev
 http://127.0.0.1:9900
 ```
 
-除了默认真实联调模式，当前前端还支持：
+当前前端还支持直接指定后端实现：
 
-- `pnpm dev:mock`
-- `pnpm dev:hybrid`
+- `pnpm dev:springboot`
+- `pnpm dev:nestjs`
 
-如果你想看这三种模式和登录态恢复链路的详细说明，可以继续阅读 [会话恢复与联调模式](/frontend/session-and-api-modes)。
+如果你想看前端如何在 Spring Boot 与 NestJS 之间切换，以及登录态恢复链路的详细说明，可以继续阅读 [会话恢复与联调模式](/frontend/session-and-api-modes)。
 
 ## 关键环境变量
 
-前端主要使用 `.env.dev` 和 `.env.prod`。
+前端主要使用 `.env.springboot`、`.env.nestjs` 和 `.env.prod`。
 
 | 变量 | 默认值 | 作用 |
 | --- | --- | --- |
-| `VITE_API_PROXY_TARGET` | `http://127.0.0.1:3001` | 开发环境下 `/api` 代理目标 |
-| `VITE_API_DOC_URL` | `http://127.0.0.1:3001/docs` | Swagger 地址 |
+| `VITE_API_PROXY_TARGET` | `http://127.0.0.1:3001` 或 `http://127.0.0.1:3002` | 开发环境下 `/api` 代理目标 |
+| `VITE_API_DOC_URL` | `http://127.0.0.1:3001/api/docs` 或 `http://127.0.0.1:3002/docs` | Swagger 地址 |
 | `VITE_TENANT_ID` | `tenant_001` | 默认租户 ID |
 | `VITE_TENANT_ENABLED` | `true` | 是否启用租户 Header |
 | `VITE_LOGIN_CAPTCHA_ENABLED` | `true` | 登录页是否启用验证码 |
@@ -91,11 +91,11 @@ proxy: {
 - 前端不需要在每个接口里硬编码完整域名。
 - 只要改 `VITE_API_PROXY_TARGET`，就可以切换联调环境。
 
-此外，前端仓库当前还支持：
+此外，前端仓库当前支持：
 
-- `pnpm dev`：真实接口模式
-- `pnpm dev:mock`：本地 Mock 模式
-- `pnpm dev:hybrid`：Mock + 真实接口混合模式
+- `pnpm dev`：默认等价于 `pnpm dev:springboot`
+- `pnpm dev:springboot`：联调 Spring Boot 后端
+- `pnpm dev:nestjs`：联调 NestJS 后端
 
 ## 目录结构与职责
 

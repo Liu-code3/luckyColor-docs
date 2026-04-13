@@ -2,18 +2,22 @@
 
 ## 基本约定
 
-LuckyColor 后端统一通过 REST 风格接口对外提供能力，默认地址如下：
+LuckyColor 后端统一通过 REST 风格接口对外提供能力，当前有两套常用本地地址：
+
+如果你正在对照 Spring Boot 与 NestJS 的落点差异，建议同时阅读 [Spring Boot 与 NestJS 接口契约对照表](/api/contract-comparison)。
 
 | 项目 | 地址 |
 | --- | --- |
-| 服务根地址 | `http://127.0.0.1:3001` |
+| Spring Boot 服务根地址 | `http://127.0.0.1:3001` |
+| NestJS 服务根地址 | `http://127.0.0.1:3002` |
 | 全局接口前缀 | `/api` |
-| Swagger 文档 | `http://127.0.0.1:3001/docs` |
+| Spring Boot Swagger | `http://127.0.0.1:3001/api/docs` |
+| NestJS Swagger | `http://127.0.0.1:3002/docs` |
 
 也就是说，前端真正调用的接口通常形如：
 
 ```text
-http://127.0.0.1:3001/api/users
+http://127.0.0.1:3001/api/auth/profile
 ```
 
 ## 统一返回结构
@@ -163,7 +167,7 @@ x-tenant-id: tenant_001
 ```mermaid
 sequenceDiagram
     participant UI as Frontend
-    participant API as NestJS API
+    participant API as Backend API
 
     UI->>API: GET /api/auth/captcha/challenge
     API-->>UI: captchaId + captchaSvg
@@ -216,6 +220,12 @@ sequenceDiagram
 | `1013001` | `403` | 租户访问被拒绝 |
 | `1013002` | `403` | 租户已禁用 |
 | `1013003` | `403` | 租户已过期 |
+
+## 继续阅读
+
+- [Spring Boot 与 NestJS 接口契约对照表](/api/contract-comparison)
+- [Spring Boot 后端说明](/backend/springboot-overview)
+- [NestJS 后端说明](/backend/overview)
 | `1014001` | `404` | 用户不存在 |
 | `1014002` | `404` | 角色不存在 |
 | `1014003` | `404` | 菜单不存在 |
