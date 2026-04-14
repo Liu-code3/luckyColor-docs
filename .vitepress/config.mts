@@ -120,6 +120,7 @@ export default withMermaid(defineConfig({
           items: [
             { text: 'NestJS 后端说明', link: '/backend/overview' },
             { text: 'Spring Boot 后端说明', link: '/backend/springboot-overview' },
+            { text: 'Spring Boot 数据库初始化', link: '/backend/springboot-database-bootstrap' },
             { text: 'NestJS 模块渐进式解读', link: '/backend/module-walkthrough' },
             { text: 'Spring Boot 模块渐进式解读', link: '/backend/springboot-module-walkthrough' },
             { text: '模块调用路径图模板', link: '/backend/module-call-path-template' },

@@ -117,6 +117,8 @@ Spring Boot 版本和 NestJS 最大的运行差异之一在于初始化方式：
 - 数据库里的实际表结构
 - 管理员、角色、菜单、字典等基础数据
 
+如果你想看一份更具体的落地说明，可以继续阅读 [Spring Boot 数据库初始化方式](/backend/springboot-database-bootstrap)。
+
 ## 目录结构与职责
 
 ```text
@@ -239,4 +241,4 @@ Spring Boot 版本新增了一个很有价值的模块：`modules/frontend/web`�
 - 你要确认前端当前真正依赖的接口契约是否已经在 Java 版本落地
 - 你要评估从 NestJS 迁移到 Spring Boot 还差哪些能力
 
-如果你还想顺着 Java 模块继续往里读，再继续阅读 [Spring Boot 后端模块渐进式解读](/backend/springboot-module-walkthrough)。如果你还想回看早期 Node.js 版本的目录组织方式、Prisma 数据模型或原始模块边界，再继续阅读 [NestJS 后端说明](/backend/overview) 和 [切换 Java 时的文档更新点](/backend/java-migration)。
+如果你还想顺着 Java 模块继续往里读，再继续阅读 [Spring Boot 后端模块渐进式解读](/backend/springboot-module-walkthrough)。如果你想先把当前数据库准备方式看明白，再继续阅读 [Spring Boot 数据库初始化方式](/backend/springboot-database-bootstrap)。如果你还想回看早期 Node.js 版本的目录组织方式、Prisma 数据模型或原始模块边界，再继续阅读 [NestJS 后端说明](/backend/overview) 和 [切换 Java 时的文档更新点](/backend/java-migration)。
