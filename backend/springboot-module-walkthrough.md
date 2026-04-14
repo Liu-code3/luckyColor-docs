@@ -65,7 +65,7 @@ Spring Boot 版本的 `modules/` 下主要有五块：
 
 - 服务端口默认 `3001`
 - 全局上下文路径是 `/api`
-- MySQL、Redis、Flyway 的默认连接方式
+- MySQL、Redis 的默认连接方式
 - JWT、租户头、默认租户等基础配置
 
 它决定了“应用默认怎么跑”。
@@ -619,7 +619,7 @@ src/main/java/com/luckycolor/admin/modules/platform/
 3. 接着看 `iam`，因为所有真实请求都绕不开认证、权限和租户。
 4. 然后看 `system`，理解平台最核心的后台能力。
 5. 再看 `tenant`，理解 LuckyColor 为什么不是普通后台，而是 SaaS 平台。
-6. 最后看 `platform` 和 Flyway 迁移脚本，理解公共能力和数据落库方式。
+6. 最后看 `platform` 和数据库基础数据准备方式，理解公共能力和数据落库方式。
 
 ## 如果你只想记住一个排查规律
 

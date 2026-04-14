@@ -5,7 +5,7 @@
 这页专门补 Spring Boot 版本的部署口径，解决两个常见问题：
 
 - 当前通用部署文档很多示例最早是按 NestJS 写的，Java 读者容易不知道该替换哪些地方
-- Spring Boot 生产部署通常更关心 `Jar`、`systemd`、`prod profile`、`Flyway` 和可写存储目录，而不是 `pnpm start:prod`
+- Spring Boot 生产部署通常更关心 `Jar`、`systemd`、`prod profile` 和可写存储目录，而不是 `pnpm start:prod`
 
 如果你只想先看整体部署形态，仍然建议先看 [生产部署方案](/deployment/production)；如果你要落地 Java 版本，再回到本页按步骤执行。
 
@@ -236,7 +236,7 @@ services:
 ### 容器化时要特别注意的点
 
 - `STORAGE_ROOT_PATH` 必须挂载到宿主机，否则重启后文件会丢失
-- 首次启动会跑 Flyway，数据库账号需要有建表权限
+- 启动前要先确认数据库结构和基础数据已经准备好
 - `prod` profile 默认关闭 Swagger，如果你访问 `/api/docs` 发现没有页面，先确认这是不是预期行为
 
 ## Nginx 反向代理怎么配
@@ -273,7 +273,6 @@ location /docs/ {
 - `SPRING_PROFILES_ACTIVE=prod`
 - `JWT_SECRET` 已替换
 - `DB_NAME` 指向 `luckycolor_admin_sb`
-- `FLYWAY_ENABLED=true` 且迁移执行成功
 - `STORAGE_ROOT_PATH` 目录存在且可写
 - `GET /api/health` 返回正常
 - 前端登录、工作台、用户管理、租户管理能正常打开
@@ -291,13 +290,13 @@ location /docs/ {
 - 租户头 `x-tenant-id` 是否透传到后端
 - 当前登录用户和角色权限是否正确
 
-### 服务启动后一直报 Flyway 错误
+### 服务启动后报数据库结构或基础数据错误
 
 优先检查：
 
 - 数据库是否已创建 `luckycolor_admin_sb`
-- 数据库账号是否有建表和修改表结构权限
-- 是否重复把历史表结构和新迁移脚本混在了一起
+- 当前库结构是否与代码里的 Mapper / DO 对齐
+- 管理员、角色、菜单等基础数据是否已准备齐全
 
 ### 生产环境访问 `/docs` 是空白或 404
 

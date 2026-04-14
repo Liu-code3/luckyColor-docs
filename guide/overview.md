@@ -79,7 +79,6 @@ LuckyColor 是一套面向中后台场景的多租户 SaaS 管理平台。当前
 - Java 17
 - Spring Security
 - MyBatis-Plus 3.5.x
-- Flyway
 - MySQL 8.x
 - Redis 7.x
 - springdoc OpenAPI

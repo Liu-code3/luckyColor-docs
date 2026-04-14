@@ -27,7 +27,6 @@ Spring Boot 后端不是单纯把 Node.js 代码翻译成 Java，它承担的仍
 - MyBatis-Plus 3.5.x
 - MySQL 8.x
 - Redis 7.x
-- Flyway
 - springdoc OpenAPI
 - JUnit 5 / Spring Boot Test
 
@@ -110,15 +109,13 @@ java -jar .\target\luckycolor-admin-springboot-1.0.0-alpha.1.jar
 Spring Boot 版本和 NestJS 最大的运行差异之一在于初始化方式：
 
 - NestJS 依赖 Prisma 的 `db:setup`
-- Spring Boot 依赖 Flyway 迁移脚本自动建表与写入引导数据
+- Spring Boot 依赖预先准备好的数据库结构与基础数据，并由 MyBatis-Plus 负责运行期持久层映射
 
-对应目录：
+对应重点：
 
-```text
-src/main/resources/db/migration
-```
-
-当前已经包含从 `V1__init_tenant_schema.sql` 到 `V26__grant_tenant_bootstrap_permissions.sql` 的迁移脚本，用来逐步建立租户、系统用户、角色、菜单、字典、公告、水印、代码生成和前端兼容数据。
+- `application.yml` 中的数据源配置
+- 数据库里的实际表结构
+- 管理员、角色、菜单、字典等基础数据
 
 ## 目录结构与职责
 
@@ -131,8 +128,7 @@ luckycolor-admin-springboot/
 │  └─ modules/                                   frontend、iam、system、tenant、platform
 ├─ src/main/resources/
 │  ├─ application.yml                            默认配置
-│  ├─ application-prod.yml                       生产配置
-│  └─ db/migration/                              Flyway 迁移脚本
+│  └─ application-prod.yml                       生产配置
 ├─ src/test/java/com/luckycolor/admin/           控制器、服务与回归测试
 ├─ mvnw / mvnw.cmd                               Maven Wrapper
 └─ pom.xml                                       依赖与构建配置
@@ -230,7 +226,7 @@ Spring Boot 版本新增了一个很有价值的模块：`modules/frontend/web`�
 建议在以下场景至少执行一次 `.\mvnw.cmd clean verify`：
 
 - 修改租户上下文或权限链路
-- 修改 Flyway 迁移脚本
+- 修改数据库结构准备方式或基础数据
 - 修改前端兼容接口
 - 修改统一响应结构或登录返回结构
 

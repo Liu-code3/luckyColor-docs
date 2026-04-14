@@ -219,19 +219,22 @@
 - [x] 已完成前端权限常量值收口
 - [x] 已更新前端权限规范文档 `BUTTON_PERMISSION_SPEC.md`
 - [x] 已更新文档站权限对照页 `security/permission-alignment.md`
+- [x] 已新增 A7 定向回归用例 `tests/playwright/smoke/permission-alignment.spec.ts`
+- [x] 已确认管理员真实权限快照曾缺少 `tenant:delete` 与 `tenant:package:delete`，导致租户管理与租户套餐页删除按钮不显示
+- [x] 已改为 MyBatis-Plus 启动修复方案：`BuiltinPermissionRepairRunner` 会在持久化模式下幂等补齐内置超级管理员角色与账号的缺失权限
 
 ### 子任务
 
-- [ ] A7-1 回归用户管理页“分配角色”按钮与接口权限
-- [ ] A7-2 回归角色管理页“分配菜单 / 数据范围”按钮与接口权限
-- [ ] A7-3 回归租户管理页新增、更新、删除、状态切换按钮与接口权限
-- [ ] A7-4 回归租户套餐页菜单范围、绑定租户按钮与接口权限
-- [ ] A7-5 抽查 `/api/auth/access` 或 `/api/auth/button-permissions` 返回的权限值是否与前端当前常量值一致
+- [x] A7-1 回归用户管理页“分配角色”按钮与接口权限
+- [x] A7-2 回归角色管理页“分配菜单 / 数据范围”按钮与接口权限
+- [x] A7-3 回归租户管理页新增、更新、删除、状态切换按钮与接口权限
+- [x] A7-4 回归租户套餐页菜单范围、绑定租户按钮与接口权限
+- [x] A7-5 抽查 `/api/auth/access` 或 `/api/auth/button-permissions` 返回的权限值是否与前端当前常量值一致
 
 ### 验收标准
 
-- [ ] 按钮可见时，对应接口不再误报 403
-- [ ] 前端页面判断的权限值与后端实际校验点一致
+- [x] 按钮可见时，对应接口不再误报 403
+- [x] 前端页面判断的权限值与后端实际校验点一致
 
 ## A8 全量 smoke 回归
 

@@ -4,7 +4,7 @@
 
 生产环境推荐采用“前端静态资源 + 后端应用服务 + 独立 MySQL + 独立 Redis + Nginx 统一入口”的拆分方式。
 
-如果你当前部署的是 Java 版本，建议配合阅读 [Spring Boot 部署说明](/deployment/springboot)。那一页会把 Jar、`systemd`、`prod profile`、Flyway 和 Swagger 暴露策略单独讲清楚。
+如果你当前部署的是 Java 版本，建议配合阅读 [Spring Boot 部署说明](/deployment/springboot)。那一页会把 Jar、`systemd`、`prod profile`、数据库准备方式和 Swagger 暴露策略单独讲清楚。
 
 推荐原因：
 

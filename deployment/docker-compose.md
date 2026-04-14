@@ -135,7 +135,7 @@ docker compose -f docker-compose.prod.yml exec server pnpm prisma:db:push
 docker compose -f docker-compose.prod.yml exec server pnpm prisma:seed
 ```
 
-如果你部署的是 Spring Boot，不需要执行 Prisma 命令，而是要在镜像中运行打包后的 Jar，并依赖 Flyway 在启动时自动迁移数据库。
+如果你部署的是 Spring Boot，不需要执行 Prisma 命令，而是要在镜像中运行打包后的 Jar，并提前准备好数据库结构与基础数据。
 
 ### 5. 验证入口
 

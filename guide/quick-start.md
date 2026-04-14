@@ -125,7 +125,7 @@ Spring Boot 默认会使用下面这些本地配置：
 | `JWT_SECRET` | `replace-with-a-strong-secret-for-luckycolor-admin` | JWT 密钥 |
 | `TENANT_HEADER` | `x-tenant-id` | 租户 Header |
 
-Spring Boot 使用 Flyway 自动初始化数据库，首次启动时会执行 `src/main/resources/db/migration` 下的迁移脚本和引导数据。
+Spring Boot 当前使用 MyBatis-Plus 持久层，联调前需要先准备好数据库结构和基础数据。
 
 当前文档统一以 `application.yml` 中的默认值为准，也就是本地 `127.0.0.1:3306` 和 `127.0.0.1:6379`；如果你的个人 `local profile` 指向其他服务器，请在联调前覆盖回默认值，避免和文档口径不一致。
 

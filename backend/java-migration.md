@@ -135,7 +135,7 @@ Java 项目可能改为：
 - `prisma db push`
 - `prisma seed`
 
-如果 Java 改用 Flyway 或 Liquibase，就必须同步更新：
+如果 Java 版本调整数据库初始化方案，就必须同步更新：
 
 - 数据库初始化命令
 - 数据库版本迁移说明
