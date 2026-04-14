@@ -4,8 +4,8 @@
 
 LuckyColor 现在同时存在两套后端实现：
 
-- `NestJS`：`D:\zl\luckyColor-admin-serve`
-- `Spring Boot`：`D:\zl\luckycolor-admin-springboot`
+- `NestJS`：`https://github.com/Liu-code3/luckyColor-admin-serve`，本地统一写作 `<workspace>/luckyColor-admin-serve`
+- `Spring Boot`：`/Users/admin/code/luckyColor-admin-springboot`
 
 前端已经支持在两套后端之间切换，但两边的代码组织方式并不完全一样。为了让前端、测试、实施和后端维护者更容易对齐，这页专门回答一个问题：
 

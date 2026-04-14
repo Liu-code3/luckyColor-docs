@@ -12,6 +12,8 @@ LuckyColor 当前采用的是一套“登录态 + 菜单权限 + 按钮权限 + 
 
 这也是为什么平台既要做前端权限显隐，也要做后端权限校验。
 
+如果你当前是在排查“为什么按钮没显示”“为什么接口返回 403”或者想核对前端页面使用的权限值与后端校验点，建议先看 [前后端权限码对照](/security/permission-alignment)，再回到本页理解完整权限模型。
+
 ## 权限体系由哪几部分组成
 
 ### 1. 登录认证
@@ -38,8 +40,9 @@ LuckyColor 当前采用的是一套“登录态 + 菜单权限 + 按钮权限 + 
 
 后端主要通过：
 
-- `@RequireMenuPermission(...)`
-- `@RequirePlatformMenuPermission(...)`
+- NestJS 侧常见的 `@RequireMenuPermission(...)`
+- NestJS 侧常见的 `@RequirePlatformMenuPermission(...)`
+- Spring Boot 侧当前更常见的是 `@RequirePermission(...)` 与访问快照中的菜单 / 按钮权限联合裁决
 
 来做控制。
 
@@ -50,16 +53,19 @@ LuckyColor 当前采用的是一套“登录态 + 菜单权限 + 按钮权限 + 
 - `system:user:create`
 - `system:user:update`
 - `system:user:delete`
-- `system:role:assign-menu`
+- `system:role:authorize`
 - `tenant:package:delete`
 
 后端主要通过：
 
-- `@RequirePermissions(...)`
+- NestJS 侧常见的 `@RequirePermissions(...)`
+- Spring Boot 侧当前更常见的是 `@RequirePermission(...)`
 
 来校验。
 
 前端则会根据 `/api/auth/access` 或 `/api/auth/button-permissions` 返回的权限码控制按钮显隐。
+
+如果你要对照前端常量值与 Spring Boot 真实权限码，或者理解前端语义别名和真实权限值的关系，可以继续看 [前后端权限码对照](/security/permission-alignment)。
 
 ### 4. 数据权限
 
@@ -111,7 +117,6 @@ LuckyColor 当前采用的是一套“登录态 + 菜单权限 + 按钮权限 + 
 
 - `system:user:create`
 - `system:user:update`
-- `system:user:status`
 - `system:user:reset-password`
 - `system:user:assign-role`
 - `system:user:delete`
@@ -120,24 +125,19 @@ LuckyColor 当前采用的是一套“登录态 + 菜单权限 + 按钮权限 + 
 
 - `system:role:create`
 - `system:role:update`
-- `system:role:status`
-- `system:role:data-scope`
-- `system:role:assign-menu`
+- `system:role:authorize`
 - `system:role:delete`
 
 ### 菜单管理
 
 - `system:menu:create`
-- `system:menu:sync`
 - `system:menu:update`
-- `system:menu:status`
 - `system:menu:delete`
 
 ### 部门管理
 
 - `system:department:create`
 - `system:department:update`
-- `system:department:status`
 - `system:department:delete`
 
 ### 字典与配置
@@ -164,8 +164,9 @@ LuckyColor 当前采用的是一套“登录态 + 菜单权限 + 按钮权限 + 
 
 ### 租户中心
 
-- `tenant:tenant:create`
-- `tenant:tenant:update`
+- `tenant:create`
+- `tenant:update`
+- `tenant:delete`
 - `tenant:package:create`
 - `tenant:package:update`
 - `tenant:package:delete`

@@ -2,11 +2,9 @@
 
 ## 项目位置
 
-Spring Boot 后端项目目录：
+Spring Boot 后端项目仓库名：`luckyColor-admin-springboot`
 
-```text
-D:\zl\luckycolor-admin-springboot
-```
+当前本机项目路径：`/Users/admin/code/luckyColor-admin-springboot`
 
 ## Spring Boot 版本在整个平台中的职责
 
@@ -69,26 +67,36 @@ Spring Boot 默认从 `src/main/resources/application.yml` 读取配置，也支
 | `DEFAULT_TENANT_ID` | 空 | 无显式租户时的回退租户 |
 | `STORAGE_ROOT_PATH` | `/data/luckycolor/storage` | 生产环境文件根目录 |
 
+### 当前文档采用哪套默认值
+
+这份文档统一按 `application.yml` 的本地默认值描述，也就是：
+
+- MySQL：`127.0.0.1:3306`
+- Redis：`127.0.0.1:6379`
+- MySQL 账号：`root`
+- MySQL 密码：`123456`
+
+如果你的 `application-local.yml` 或个人环境变量覆盖到了其他服务器，请以这套默认联调口径为准进行文档理解和联调说明。
+
 ## 启动方式
 
 ### 本地启动
 
 ```powershell
-cd D:\zl\luckycolor-admin-springboot
-.\mvnw.cmd spring-boot:run
+mvnw.cmd spring-boot:run
 ```
 
 ### 打包产物
 
 ```powershell
-.\mvnw.cmd clean package
+mvnw.cmd clean package
 ```
 
 ### 按生产配置启动
 
 ```powershell
 $env:SPRING_PROFILES_ACTIVE="prod"
-.\mvnw.cmd spring-boot:run
+mvnw.cmd spring-boot:run
 ```
 
 如果你习惯以 Jar 方式部署，也可以在打包后执行：

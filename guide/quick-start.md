@@ -22,6 +22,29 @@
 | Redis | 7.x | 缓存、验证码等能力依赖 |
 | Docker | 可选 | 可用于本地拉起 MySQL / Redis |
 
+## 路径约定
+
+本文中的 Spring Boot 项目当前使用真实路径，其余仓库仍使用占位写法：
+
+- `<workspace>/luckyColor-admin`
+- `<workspace>/luckyColor-admin-serve`
+- `/Users/admin/code/luckyColor-admin-springboot`
+
+执行命令时，请把 `<workspace>` 替换成你自己的代码目录。
+
+## 默认联调口径
+
+本文统一按以下默认配置说明：
+
+- MySQL：`127.0.0.1:3306`
+- Redis：`127.0.0.1:6379`
+- MySQL 账号：`root`
+- MySQL 密码：`123456`
+
+如果你的本机存在额外的个人联调 profile，也建议优先覆盖成这套默认值，避免和文档口径分叉。
+
+如果你在启动前想先核对前端模式、后端端口、数据库名、Redis 地址和默认账号密码，建议先看 [双后端环境变量与默认值对照](/guide/env-alignment)。
+
 ## 推荐启动顺序
 
 1. 准备 MySQL 与 Redis。
@@ -30,6 +53,8 @@
 4. 确认 Swagger 与健康检查可访问。
 5. 启动前端。
 6. 用默认管理员账号登录并检查系统菜单。
+
+如果你能登录，但后面碰到“按钮不显示”“按钮显示但接口 403”“前后端权限名对不上”这类问题，直接继续看 [前后端权限码对照](/security/permission-alignment)。
 
 ## 第一步：启动依赖服务
 
@@ -47,7 +72,7 @@ CREATE DATABASE luckycolor_admin_sb DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb
 - `luckycolor_admin`：给 NestJS 使用
 - `luckycolor_admin_sb`：给 Spring Boot 使用
 
-如果你想偷懒快速拉起 MySQL，也可以先在 `D:\zl\luckyColor-admin-serve` 下执行：
+如果你想偷懒快速拉起 MySQL，也可以先在 `<workspace>/luckyColor-admin-serve` 下执行：
 
 ```powershell
 docker compose up -d
@@ -72,8 +97,8 @@ Redis 需要单独准备，你可以任选一种方式：
 
 | 实现 | 仓库位置 | 默认联调端口 | Swagger 地址 | 适合场景 |
 | --- | --- | --- | --- | --- |
-| Spring Boot | `D:\zl\luckycolor-admin-springboot` | `3001` | `http://127.0.0.1:3001/api/docs` | 当前默认联调、Java 技术栈交付 |
-| NestJS | `D:\zl\luckyColor-admin-serve` | `3002` | `http://127.0.0.1:3002/docs` | 对照历史实现、验证契约兼容 |
+| Spring Boot | `/Users/admin/code/luckyColor-admin-springboot` | `3001` | `http://127.0.0.1:3001/api/docs` | 当前默认联调、Java 技术栈交付 |
+| NestJS | `<workspace>/luckyColor-admin-serve` | `3002` | `http://127.0.0.1:3002/docs` | 对照历史实现、验证契约兼容 |
 
 如果你只是第一次接手项目，推荐优先跑 Spring Boot；前端当前的 `pnpm dev` 默认也指向 Spring Boot。
 
@@ -81,10 +106,10 @@ Redis 需要单独准备，你可以任选一种方式：
 
 ### 方案 A：启动 Spring Boot 后端
 
-在 `D:\zl\luckycolor-admin-springboot` 下执行：
+在 `/Users/admin/code/luckyColor-admin-springboot` 下执行：
 
 ```powershell
-.\mvnw.cmd spring-boot:run
+mvnw.cmd spring-boot:run
 ```
 
 Spring Boot 默认会使用下面这些本地配置：
@@ -102,6 +127,8 @@ Spring Boot 默认会使用下面这些本地配置：
 
 Spring Boot 使用 Flyway 自动初始化数据库，首次启动时会执行 `src/main/resources/db/migration` 下的迁移脚本和引导数据。
 
+当前文档统一以 `application.yml` 中的默认值为准，也就是本地 `127.0.0.1:3306` 和 `127.0.0.1:6379`；如果你的个人 `local profile` 指向其他服务器，请在联调前覆盖回默认值，避免和文档口径不一致。
+
 启动成功后可访问：
 
 - 接口基地址：`http://127.0.0.1:3001/api`
@@ -111,7 +138,7 @@ Spring Boot 使用 Flyway 自动初始化数据库，首次启动时会执行 `s
 
 ### 方案 B：启动 NestJS 后端
 
-在 `D:\zl\luckyColor-admin-serve` 下执行：
+在 `<workspace>/luckyColor-admin-serve` 下执行：
 
 ```powershell
 pnpm install
@@ -140,7 +167,7 @@ NestJS 成功启动后可访问：
 
 ## 第四步：启动前端
 
-在 `D:\zl\luckyColor-admin` 下执行：
+在 `<workspace>/luckyColor-admin` 下执行：
 
 ```powershell
 pnpm install
@@ -177,8 +204,8 @@ http://127.0.0.1:9900
 
 | 文件 | 对应后端 | 关键目标地址 |
 | --- | --- | --- |
-| `D:\zl\luckyColor-admin\.env.springboot` | Spring Boot | `http://127.0.0.1:3001` |
-| `D:\zl\luckyColor-admin\.env.nestjs` | NestJS | `http://127.0.0.1:3002` |
+| `<workspace>/luckyColor-admin/.env.springboot` | Spring Boot | `http://127.0.0.1:3001` |
+| `<workspace>/luckyColor-admin/.env.nestjs` | NestJS | `http://127.0.0.1:3002` |
 
 Spring Boot 模式的关键项：
 

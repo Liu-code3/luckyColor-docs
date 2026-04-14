@@ -4,18 +4,14 @@
 
 LuckyColor 现在不是只有一套后端，而是同时维护：
 
-- `NestJS` 实现：仓库 `D:\zl\luckyColor-admin-serve`
-- `Spring Boot` 实现：仓库 `D:\zl\luckycolor-admin-springboot`
+- `NestJS` 实现：仓库 `https://github.com/Liu-code3/luckyColor-admin-serve`，本地统一写作 `<workspace>/luckyColor-admin-serve`
+- `Spring Boot` 实现：本机路径 `/Users/admin/code/luckyColor-admin-springboot`
 
 本页聚焦 NestJS 版本。如果你当前主要使用 Java 技术栈或默认前端联调模式，请优先阅读 [Spring Boot 后端说明](/backend/springboot-overview)。
 
 ## 项目位置
 
-NestJS 后端项目目录：
-
-```text
-D:\zl\luckyColor-admin-serve
-```
+NestJS 后端项目仓库名：`luckyColor-admin-serve`
 
 ## 后端在整个平台中的职责
 
@@ -74,7 +70,6 @@ LuckyColor 后端不是简单的数据增删改查接口，它承担的是整个
 ## 启动方式
 
 ```powershell
-cd D:\zl\luckyColor-admin-serve
 pnpm install
 Copy-Item .env.example .env
 pnpm db:setup
@@ -300,7 +295,7 @@ LuckyColor 后端的组织风格可以概括成一句话：
 后端依赖 Prisma schema，核心文件是：
 
 ```text
-D:\zl\luckyColor-admin-serve\prisma\schema.prisma
+<workspace>/luckyColor-admin-serve/prisma/schema.prisma
 ```
 
 初始化脚本主要包括：

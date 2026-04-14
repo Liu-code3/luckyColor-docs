@@ -2,11 +2,13 @@
 
 ## 项目位置
 
-前端项目目录：
+前端仓库名：`luckyColor-admin`
 
-```text
-D:\zl\luckyColor-admin
-```
+文档内统一写作：`<workspace>/luckyColor-admin`
+
+公开仓库地址：`https://github.com/Liu-code3/luckyColor-admin`
+
+如果你的本地目录不同，只需要替换 `<workspace>` 即可。
 
 ## 前端在整个平台中的职责
 
@@ -38,7 +40,6 @@ D:\zl\luckyColor-admin
 ## 启动方式
 
 ```powershell
-cd D:\zl\luckyColor-admin
 pnpm install
 pnpm dev
 ```
@@ -54,7 +55,7 @@ http://127.0.0.1:9900
 - `pnpm dev:springboot`
 - `pnpm dev:nestjs`
 
-如果你想看前端如何在 Spring Boot 与 NestJS 之间切换，以及登录态恢复链路的详细说明，可以继续阅读 [会话恢复与联调模式](/frontend/session-and-api-modes)。
+如果你想看前端如何在 Spring Boot 与 NestJS 之间切换，以及登录态恢复链路的详细说明，可以继续阅读 [会话恢复与联调模式](/frontend/session-and-api-modes)。如果你现在正在核对默认端口、数据库、Redis、本地账号密码等联调口径，建议同时查看 [双后端环境变量与默认值对照](/guide/env-alignment)。
 
 ## 关键环境变量
 
@@ -90,6 +91,8 @@ proxy: {
 - 业务代码里尽量只写 `/api` 相对路径。
 - 前端不需要在每个接口里硬编码完整域名。
 - 只要改 `VITE_API_PROXY_TARGET`，就可以切换联调环境。
+
+如果你已经碰到“前端按钮不显示，但接口又能调”或者“按钮显示了，但接口返回 403”这类问题，建议继续看 [前后端权限码对照](/security/permission-alignment)。
 
 此外，前端仓库当前支持：
 
@@ -398,6 +401,12 @@ pnpm preview
 6. `src/views/sys/*`
 7. `src/views/tool/codegen/*`
 8. `tests/playwright/smoke/*`
+
+如果你不是直接读源码，而是先想建立联调口径，推荐先看：
+
+1. [双后端环境变量与默认值对照](/guide/env-alignment)
+2. [会话恢复与联调模式](/frontend/session-and-api-modes)
+3. [前后端权限码对照](/security/permission-alignment)
 
 ## 如果你想按模块顺着读代码
 

@@ -33,7 +33,7 @@ flowchart LR
 | `luckyColor-docs` | `https://github.com/Liu-code3/luckyColor-docs` | 维护产品、技术与部署文档 |
 | `luckyColor-admin` | `https://github.com/Liu-code3/luckyColor-admin` | 渲染后台页面、处理菜单路由、调用接口 |
 | `luckyColor-admin-serve` | `https://github.com/Liu-code3/luckyColor-admin-serve` | NestJS 实现，输出 REST API、权限校验、租户隔离、数据库读写 |
-| `luckycolor-admin-springboot` | `D:\zl\luckycolor-admin-springboot` | Spring Boot 实现，输出与前端兼容的 REST API、权限校验、租户隔离、数据库读写 |
+| `luckyColor-admin-springboot` | `/Users/admin/code/luckyColor-admin-springboot` | Spring Boot 实现，输出与前端兼容的 REST API、权限校验、租户隔离、数据库读写 |
 
 文档站不是独立存在的，它描述的是这几个真实仓库之间的协作方式。
 

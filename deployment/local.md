@@ -22,6 +22,25 @@
 | Redis | 7.x | 缓存与验证码依赖 |
 | Docker | 可选 | 推荐用于启动 MySQL |
 
+## 路径约定
+
+本文中的仓库路径约定如下：
+
+- `<workspace>/luckyColor-admin`
+- `<workspace>/luckyColor-admin-serve`
+- `/Users/admin/code/luckyColor-admin-springboot`
+
+实际执行时，请替换成你自己的代码目录。
+
+## 默认联调数据库与缓存
+
+文档统一使用下面这套本地默认值：
+
+- MySQL：`127.0.0.1:3306`
+- Redis：`127.0.0.1:6379`
+- MySQL 账号：`root`
+- MySQL 密码：`123456`
+
 ## 部署顺序
 
 建议严格按这个顺序，不要跳步：
@@ -35,7 +54,7 @@
 
 ## 第一步：启动 MySQL
 
-在后端仓库 `D:\zl\luckyColor-admin-serve` 下执行：
+在后端仓库 `<workspace>/luckyColor-admin-serve` 下执行：
 
 ```powershell
 docker compose up -d
@@ -68,16 +87,15 @@ REDIS_URL="redis://127.0.0.1:6379"
 
 | 实现 | 仓库位置 | 默认联调端口 | 前端模式 |
 | --- | --- | --- | --- |
-| Spring Boot | `D:\zl\luckycolor-admin-springboot` | `3001` | `pnpm dev` / `pnpm dev:springboot` |
-| NestJS | `D:\zl\luckyColor-admin-serve` | `3002` | `pnpm dev:nestjs` |
+| Spring Boot | `/Users/admin/code/luckyColor-admin-springboot` | `3001` | `pnpm dev` / `pnpm dev:springboot` |
+| NestJS | `<workspace>/luckyColor-admin-serve` | `3002` | `pnpm dev:nestjs` |
 
 ## 第四步：初始化并启动后端
 
 ### Spring Boot
 
 ```powershell
-cd D:\zl\luckycolor-admin-springboot
-.\mvnw.cmd spring-boot:run
+mvnw.cmd spring-boot:run
 ```
 
 启动后优先验证：
@@ -88,7 +106,6 @@ cd D:\zl\luckycolor-admin-springboot
 ### NestJS
 
 ```powershell
-cd D:\zl\luckyColor-admin-serve
 pnpm install
 Copy-Item .env.example .env
 pnpm db:setup
@@ -111,7 +128,6 @@ pnpm dev
 ## 第五步：启动前端
 
 ```powershell
-cd D:\zl\luckyColor-admin
 pnpm install
 pnpm dev:springboot
 ```
@@ -142,7 +158,7 @@ http://127.0.0.1:9900
 
 ### 前端
 
-`D:\zl\luckyColor-admin` 当前主要通过模式文件切换后端：
+`<workspace>/luckyColor-admin` 当前主要通过模式文件切换后端：
 
 - `pnpm dev` 默认等价于 `pnpm dev:springboot`
 - `.env.springboot` 指向 `http://127.0.0.1:3001`
@@ -153,7 +169,7 @@ http://127.0.0.1:9900
 
 ### 后端
 
-NestJS `D:\zl\luckyColor-admin-serve\.env` 里至少要确认：
+NestJS `<workspace>/luckyColor-admin-serve/.env` 里至少要确认：
 
 - `DATABASE_URL`
 - `JWT_SECRET`

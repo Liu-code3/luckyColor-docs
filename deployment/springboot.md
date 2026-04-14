@@ -88,10 +88,10 @@
 
 ### 1. 在构建机打包
 
-在 `D:\zl\luckycolor-admin-springboot` 执行：
+在 `/Users/admin/code/luckyColor-admin-springboot` 执行：
 
 ```powershell
-.\mvnw.cmd clean package
+mvnw.cmd clean package
 ```
 
 默认会生成类似产物：

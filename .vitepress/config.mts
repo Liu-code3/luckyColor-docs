@@ -61,8 +61,11 @@ export default withMermaid(defineConfig({
           items: [
             { text: '产品概述', link: '/guide/overview' },
             { text: '快速开始', link: '/guide/quick-start' },
+            { text: '环境变量对照', link: '/guide/env-alignment' },
+            { text: '修复任务板', link: '/guide/repair-task-board' },
             { text: '文档补充清单', link: '/guide/doc-gap-checklist' },
-            { text: '核心关系说明', link: '/guide/domain-relationships' }
+            { text: '核心关系说明', link: '/guide/domain-relationships' },
+            { text: '参考项目与改进', link: '/guide/reference-projects' }
           ]
         }
       ],
@@ -96,6 +99,7 @@ export default withMermaid(defineConfig({
           text: '权限与安全',
           items: [
             { text: '角色权限说明', link: '/security/rbac' },
+            { text: '前后端权限码对照', link: '/security/permission-alignment' },
             { text: '身份边界矩阵', link: '/security/actor-boundary-matrix' }
           ]
         }

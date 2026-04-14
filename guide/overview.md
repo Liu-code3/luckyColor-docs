@@ -9,9 +9,11 @@ LuckyColor 是一套面向中后台场景的多租户 SaaS 管理平台。当前
 | `luckyColor-docs` | `https://github.com/Liu-code3/luckyColor-docs` | 文档站，基于 VitePress |
 | `luckyColor-admin` | `https://github.com/Liu-code3/luckyColor-admin` | 管理后台前端，基于 Vue 3 + Vite + TypeScript |
 | `luckyColor-admin-serve` | `https://github.com/Liu-code3/luckyColor-admin-serve` | NestJS 后端服务，基于 NestJS + Prisma + MySQL + Redis |
-| `luckycolor-admin-springboot` | `D:\zl\luckycolor-admin-springboot` | Spring Boot 后端服务，基于 Spring Boot + MyBatis-Plus + MySQL + Redis |
+| `luckyColor-admin-springboot` | `/Users/admin/code/luckyColor-admin-springboot` | Spring Boot 后端服务，基于 Spring Boot + MyBatis-Plus + MySQL + Redis |
 
 这套平台不是单一业务系统，而是一套可继续承载更多业务模块的“后台底座”。它已经实现了常见 SaaS 平台需要的账户、权限、菜单、租户、字典、配置、公告和工作台等能力。
+
+除已确认的 Spring Boot 本机路径外，其他页面仍尽量避免写死个人电脑目录；如果你在本地联调，请把 `<workspace>` 理解成你自己的代码根目录。
 
 当前项目的一个重要特点是：前端并不是只绑定某一套后端实现，而是已经支持在 `NestJS` 和 `Spring Boot` 两套接口服务之间切换，用于接口契约对齐、迁移验证和多实现并行维护。
 
@@ -142,6 +144,9 @@ LuckyColor 当前采用“共享数据库、共享表、逻辑隔离”的多租
 5. 联调时配合“接口规范”“权限安全”“数据库设计”一起看。
 6. 如果你要搞清楚登录恢复、联调模式与 Mock/真实接口切换，继续看 [会话恢复与联调模式](/frontend/session-and-api-modes)。
 7. 准备部署或交付时重点查看“部署方案”章节。
+8. 如果你要继续补文档结构或做对标整理，再看 [参考项目与文档改进思路](/guide/reference-projects)。
+9. 如果你要核对双后端环境变量，或确认前端权限值与后端校验点的对应关系，再看 [双后端环境变量与默认值对照](/guide/env-alignment) 和 [前后端权限码对照](/security/permission-alignment)。
+10. 如果你要实际推进这轮 smoke 修复和链路补文档，直接按 [Smoke 修复与功能链条任务板](/guide/repair-task-board) 执行，并在每完成一个子任务后同步打勾。
 
 ## 后续维护建议
 

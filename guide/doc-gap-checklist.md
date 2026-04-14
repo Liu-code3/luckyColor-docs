@@ -51,8 +51,16 @@
 - [产品概述](/guide/overview)
 - [前端说明](/frontend/overview)
 - [接口规范](/api/spec)
+- [参考项目与文档改进思路](/guide/reference-projects)
+- [双后端环境变量与默认值对照](/guide/env-alignment)
+- [前后端权限码对照](/security/permission-alignment)
+- [Smoke 修复与功能链条任务板](/guide/repair-task-board)
 
 这些修订主要是为了把“新页面内容”挂回主阅读路径，而不是让补充页变成孤岛。
+
+其中新增的“参考项目与文档改进思路”页，主要用来沉淀对 GitHub / Gitee 高星 SaaS 文档的观察结论，避免后续补文档时只凭感觉继续堆内容。
+
+而新增的“Smoke 修复与功能链条任务板”页，主要用来做这一轮修复和后续补链路文档时的执行基线，要求每完成一个子任务就更新一次状态，避免重复修和遗漏。
 
 ## 当前最值得持续维护的文档点
 

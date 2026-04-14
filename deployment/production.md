@@ -39,7 +39,6 @@
 在前端仓库执行：
 
 ```powershell
-cd D:\zl\luckyColor-admin
 pnpm install
 pnpm build
 ```
@@ -58,7 +57,7 @@ pnpm build
 
 ## 后端发布流程
 
-如果你部署 Spring Boot，请在 `D:\zl\luckycolor-admin-springboot` 执行 `.\mvnw.cmd clean package` 或 `.\mvnw.cmd spring-boot:run`；如果你部署 NestJS，则在 `D:\zl\luckyColor-admin-serve` 执行下面这些命令：
+如果你部署 Spring Boot，请在 `/Users/admin/code/luckyColor-admin-springboot` 执行 `mvnw.cmd clean package` 或 `mvnw.cmd spring-boot:run`；如果你部署 NestJS，则在 `<workspace>/luckyColor-admin-serve` 执行下面这些命令：
 
 ### Spring Boot
 
@@ -72,7 +71,6 @@ pnpm build
 ### NestJS
 
 ```powershell
-cd D:\zl\luckyColor-admin-serve
 pnpm install
 pnpm build
 ```
